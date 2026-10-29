@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DISPATCH SENTINEL — Disaster Digital Twin Command Center</title>
+    <!-- Modern Tech Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Three.js + OrbitControls for 3D City Simulation Twin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+    <style>
+        :root {
+            --bg-base: #030407;
+            --bg-elevated: #090b10;
+            --bg-card: #0f121a;
+            --bg-input: #151924;
+            --border-subtle: #192030;
+            --border-strong: #242f47;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+            --accent-green: #10b981;
+            --accent-green-subtle: rgba(16, 185, 129, 0.12);
+            --accent-red: #ef4444;
+            --accent-red-subtle: rgba(239, 68, 68, 0.12);
+            --accent-blue: #3b82f6;
+            --accent-blue-subtle: rgba(59, 130, 246, 0.12);
+            --accent-amber: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        /* Compact Tactical Top Navbar */
+        header {
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border-subtle);
+            height: 44px;
+            padding: 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .brand-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+
+        .header-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+        }
+
+        .header-title span.badge {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.68rem;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 500;
+            border: 1px solid var(--border-subtle);
+            font-family: var(--font-mono);
+        }
+
+        .scenario-toggles { display: flex; gap: 6px; align-items: center; }
+        .scenario-label { font-size: 0.72rem; color: var(--text-tertiary); margin-right: 4px; font-weight: 500; }
+        .scenario-btn {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.72rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .scenario-btn:hover { background: var(--bg-input); border-color: var(--border-strong); color: var(--text-primary); }
+        .scenario-btn.active { background: #1d283a; color: #93c5fd; border-color: #3b82f6; font-weight: 600; }
+
+        /* KPI Bar */
+        .kpi-bar {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            padding: 6px 16px;
+            background: #06070a;
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 100;
+        }
+        .kpi-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .kpi-label {
+            font-size: 0.65rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .kpi-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            margin-top: 1px;
+            letter-spacing: -0.02em;
+        }
+
+        /* Main Workspace Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .viewport-3d-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #020305;
+        }
+        #webglCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* 3D Viewport Controls & HUD Overlay */
+        .viewport-hud {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(9, 11, 16, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-strong);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .hud-title { font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .cam-controls {
+            position: absolute;
+            bottom: 14px;
+            left: 14px;
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+        .cam-btn {
+            background: rgba(15, 18, 26, 0.9);
+            color: #94a3b8;
+            border: 1px solid var(--border-strong);
+            padding: 5px 9px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            transition: all 0.15s ease;
+        }
+        .cam-btn:hover { background: #1e293b; color: #fff; border-color: #38bdf8; }
+
+        /* Tactical Sidebar */
+        .sidebar {
+            background: var(--bg-elevated);
+            border-left: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 10px;
+            gap: 8px;
+            z-index: 50;
+        }
+
+        .panel-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .section-title {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .action-btn {
+            background: #1e293b;
+            color: #f1f5f9;
+            border: 1px solid #334155;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 6px;
+            font-size: 0.75rem;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .action-btn:hover { background: #2563eb; border-color: #3b82f6; color: #fff; }
+        .action-btn:disabled { background: #11151e; color: #475569; border-color: #1e2433; cursor: not-allowed; }
+
+        .scout-queue-item {
+            background: var(--bg-input);
+            border: 1px solid var(--border-strong);
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-top: 6px;
+        }
+
+        .evsi-badge-pos {
+            background: var(--accent-green-subtle);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.68rem;
+            font-family: var(--font-mono);
+        }
+        .evsi-badge-neg {
+            background: var(--accent-red-subtle);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.68rem;
+            font-family: var(--font-mono);
+        }
+
+        .btn-recon {
+            background: #2e1065;
+            color: #c4b5fd;
+            border: 1px solid #6b21a8;
+            padding: 6px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.73rem;
+            font-weight: 600;
+            margin-top: 6px;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-recon:hover { background: #4c1d95; border-color: #9333ea; color: #fff; }
+        .btn-recon:disabled { background: #11151e; color: #475569; border-color: #1e2433; cursor: not-allowed; }
+
+        .btn-group { display: flex; gap: 6px; margin-top: 6px; }
+        .btn-approve {
+            background: var(--accent-red-subtle);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.72rem;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+        .btn-approve:hover { background: var(--accent-red); color: white; }
+
+        .btn-dismiss {
+            background: var(--accent-green-subtle);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.72rem;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+        .btn-dismiss:hover { background: var(--accent-green); color: white; }
+
+        .mission-badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+
+        .log-entry {
+            font-size: 0.68rem;
+            font-family: var(--font-mono);
+            color: var(--text-secondary);
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .icon-svg {
+            display: inline-block;
+            vertical-align: middle;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    
+        /* ── CSS2D Facility Label Overlays ────────────────────────────────────── */
+        #css2dContainer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
+        .facility-label {
+            background: rgba(9, 11, 16, 0.93);
+            border: 1.5px solid rgba(52, 211, 153, 0.7);
+            border-radius: 6px;
+            padding: 4px 9px 3px 9px;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 600;
+            color: #86efac;
+            white-space: nowrap;
+            pointer-events: none;
+            transform: translate(-50%, -110%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            line-height: 1.3;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+        }
+        .facility-label.warning {
+            border-color: rgba(239, 68, 68, 0.8);
+            color: #fca5a5;
+            background: rgba(30, 8, 8, 0.95);
+        }
+        .facility-label.depot {
+            border-color: rgba(245, 158, 11, 0.8);
+            color: #fde68a;
+            background: rgba(30, 20, 5, 0.95);
+        }
+        .facility-label .lbl-name { font-size: 12px; font-weight: 700; }
+        .facility-label .lbl-sub  { font-size: 10px; opacity: 0.85; margin-top: 1px; }
+
+        </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <header>
+        <div class="header-left">
+            <div class="brand-icon">
+                <svg class="icon-svg" width="15" height="15" viewBox="0 0 24 24">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+            </div>
+            <div class="header-title">
+                DISPATCH SENTINEL
+                <span class="badge">3D DIGITAL TWIN • NEMOTRON 3.5 × OR-TOOLS</span>
+            </div>
+        </div>
+        <div class="scenario-toggles">
+            <span class="scenario-label">Scenario Mode:</span>
+            <button class="scenario-btn active" id="btnScenarioB" onclick="switchScenario('B')">
+                <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Scenario B: Bottleneck Lifeline (+EVSI)
+            </button>
+            <button class="scenario-btn" id="btnScenarioA" onclick="switchScenario('A')">
+                <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                Scenario A: Redundant Urban Grid (-EVSI)
+            </button>
+            <div style="height: 18px; width: 1px; background: var(--border-strong); margin: 0 4px;"></div>
+            <button class="scenario-btn" id="btnGuidedMission" onclick="runGuidedMission()" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; font-weight: 600;">
+                <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Run 30s Guided Mission
+            </button>
+            <button class="scenario-btn" id="btnCounterfactualToggle" onclick="toggleCounterfactualMode()" style="background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.4); color: #38bdf8; font-weight: 600;">
+                <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                Compare: Dispatch vs Naive Baseline
+            </button>
+        </div>
+    </header>
+
+    <!-- Top KPI Status Bar -->
+    <div class="kpi-bar">
+        <div class="kpi-card">
+            <div class="kpi-label">
+                <svg class="icon-svg" width="11" height="11" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Planned Priority Fulfillment
+            </div>
+            <div class="kpi-value" id="kpiDelivery" style="color: var(--accent-green);">100.0%</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">
+                <svg class="icon-svg" width="11" height="11" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+                Planned Fleet Distance
+            </div>
+            <div class="kpi-value" id="kpiDistance" style="color: #cbd5e1;">119.7 km</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">
+                <svg class="icon-svg" width="11" height="11" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Safety Violations
+            </div>
+            <div class="kpi-value" id="kpiViolations" style="color: var(--accent-green);">0 FATAL</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">
+                <svg class="icon-svg" width="11" height="11" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/></svg>
+                Recon Drone Budget
+            </div>
+            <div class="kpi-value" id="kpiBudget" style="color: #60a5fa;">2 / 2 Left</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">
+                <svg class="icon-svg" width="11" height="11" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Active Closures
+            </div>
+            <div class="kpi-value" id="kpiClosures" style="color: var(--accent-amber);">2 Bridges</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">
+                <svg class="icon-svg" width="11" height="11" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Plan Clock (Sim)
+            </div>
+            <div class="kpi-value" id="kpiClock" style="color: #c084fc;">T+ 0.0m</div>
+        </div>
+    </div>
+
+    <!-- Main Workspace with Three.js 3D Viewport -->
+    <div class="main-container">
+        <div class="viewport-3d-box" id="viewportBox">
+            <canvas id="webglCanvas"></canvas>
+            <div id="css2dContainer"></div>
+
+            <div class="viewport-hud">
+                <div class="hud-title" id="hudTitle">3D Operational Plan Preview</div>
+                <div id="hudEngine">Render Engine: WebGL • Three.js (Animated Route Preview)</div>
+                <div id="hudControls">Controls: Left-Click Rotate | Right-Click Pan | Scroll Zoom</div>
+                <div id="hudMode">Sector: Scenario B (Lifeline Bridge)</div>
+            </div>
+
+            <!-- Guided Mission Step Overlay Banner -->
+            <div id="guidedMissionBanner" style="display:none; position:absolute; bottom:60px; left:50%; transform:translateX(-50%); background:rgba(15, 23, 42, 0.95); border:1px solid #f59e0b; box-shadow:0 0 25px rgba(245, 158, 11, 0.25); border-radius:8px; padding:10px 18px; z-index:90; max-width:580px; text-align:center;">
+                <div style="font-size:0.68rem; font-family:var(--font-mono); color:#fbbf24; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;" id="guidedStepBadge">MISSION STAGE: INITIALIZING</div>
+                <div style="font-size:0.85rem; font-weight:600; color:#fff; margin-top:3px;" id="guidedStepTitle">Disaster Scenario Loaded</div>
+                <div style="font-size:0.73rem; color:#cbd5e1; margin-top:2px; line-height:1.35;" id="guidedStepDesc">Loading crisis parameters...</div>
+            </div>
+
+            <!-- Counterfactual Live Comparative Telemetry Card -->
+            <div id="cfTelemetryCard" style="display:none; position:absolute; bottom:45px; left:16px; background:rgba(9, 11, 16, 0.94); border:1px solid #06b6d4; box-shadow:0 0 30px rgba(6, 182, 212, 0.2); border-radius:8px; padding:12px 16px; z-index:80; width:340px; font-size:0.75rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:6px; margin-bottom:8px;">
+                    <strong style="color:#38bdf8; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.04em;">Live Policy Comparison</strong>
+                    <span id="cfModePill" style="background:#0369a1; color:#e0f2fe; font-size:0.65rem; padding:2px 6px; border-radius:3px; font-family:var(--font-mono);">DISPATCH SENTINEL</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                    <div style="background:#151924; padding:6px 8px; border-radius:4px; border-left:3px solid #10b981;">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">DISPATCH SENTINEL</div>
+                        <div style="color:#34d399; font-weight:700; font-size:1.05rem;" id="cfDispatchFulfillment">100.0%</div>
+                        <div style="color:var(--text-secondary); font-size:0.65rem;" id="cfDispatchPallets">25 / 25 Pallets (8/8)</div>
+                    </div>
+                    <div style="background:#151924; padding:6px 8px; border-radius:4px; border-left:3px solid #ef4444;">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">CONSERVATIVE BASELINE</div>
+                        <div style="color:#f87171; font-weight:700; font-size:1.05rem;" id="cfBaselineFulfillment">21.4%</div>
+                        <div style="color:var(--text-secondary); font-size:0.65rem;" id="cfBaselinePallets">5 / 25 Pallets (2/8)</div>
+                    </div>
+                </div>
+                <div style="font-size:0.7rem; color:#cbd5e1; line-height:1.4; background:rgba(239, 68, 68, 0.08); padding:6px 8px; border-radius:4px; border:1px solid rgba(239, 68, 68, 0.2);">
+                    <strong style="color:#f87171;" id="cfGainNotice">+78.6 percentage points</strong> in Planned Priority Fulfillment: Conservative policy accepts unverified rumor, completely isolating <strong>Central Trauma East (Priority 15)</strong> and 5 other facilities.
+                </div>
+            </div>
+
+            <div class="cam-controls">
+                <button class="cam-btn" onclick="setCameraView('iso')">Isometric 3D</button>
+                <button class="cam-btn" onclick="setCameraView('top')">Top-Down Ortho</button>
+                <button class="cam-btn" onclick="setCameraView('bridge')">Bridge Lifeline Focus</button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="panel-card">
+                <div class="section-title">
+                    <span>Incident Ingestion Feed</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.65rem; color: #60a5fa;">API LIVE</span>
+                </div>
+                <p id="scenarioDesc" style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 3px; line-height: 1.35;">Loading scenario...</p>
+                <button class="action-btn" id="btnIngest" onclick="ingestNextIncident()">
+                    <svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Ingest Next Incident (Nemotron Live)
+                </button>
+            </div>
+
+            <div class="panel-card">
+                <div class="section-title">
+                    <span>Restricted EVSI Reconnaissance Queue</span>
+                    <span id="queueCount" style="font-size: 0.68rem; color: var(--accent-blue); font-family: var(--font-mono);">0 PENDING</span>
+                </div>
+                <div id="queueContainer">
+                    <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;">No unverified reports in queue.</p>
+                </div>
+            </div>
+
+            <div class="panel-card" style="max-height: 140px; overflow-y: auto;">
+                <div class="section-title">
+                    <span>Verified Drone Missions</span>
+                    <span id="reconHistoryCount" style="font-size: 0.68rem; color: var(--accent-purple); font-family: var(--font-mono);">0 FLIGHTS</span>
+                </div>
+                <div id="reconHistoryContainer" style="margin-top: 4px;">
+                    <p style="font-size: 0.72rem; color: var(--text-tertiary);">No drone flights dispatched yet.</p>
+                </div>
+            </div>
+
+            <div class="panel-card" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="section-title">
+                    <span>Authoritative Decision Ledger</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.65rem; color: #10b981;">AUDIT ACTIVE</span>
+                </div>
+                <div id="logContainer" style="overflow-y: auto; flex: 1; margin-top: 4px;">
+                    <div class="log-entry">System online. Authoritative controller listening.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live EVSI Mathematical Inspector Modal -->
+    <div id="evsiModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); z-index:2000; display:none; justify-content:center; align-items:center;">
+        <div style="background:#0c1017; border:1px solid #38bdf8; border-radius:10px; width:580px; max-width:92vw; padding:20px; box-shadow:0 0 40px rgba(56, 189, 248, 0.25); color:#f8fafc; font-size:0.75rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:10px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" style="color:#38bdf8;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    <strong style="font-size:0.88rem; color:#fff;">Decision-Theoretic EVSI Inspector</strong>
+                </div>
+                <button onclick="closeEvsiModal()" style="background:transparent; border:none; color:var(--text-tertiary); font-size:1.1rem; cursor:pointer;">&times;</button>
+            </div>
+            
+            <div style="margin-top:12px; line-height:1.45; color:#cbd5e1;">
+                <div style="font-family:var(--font-mono); font-size:0.68rem; color:#94a3b8; background:var(--bg-input); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                    <strong>Governing Equation (Restricted-Policy EVSI):</strong><br>
+                    EVSI_R = \mathbb{E}_y [ U(\pi^*(y), x) ] - U(\pi_0, x_0) - C_{recon}
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;" id="evsiModalGrid">
+                    <!-- Dynamic terms injected via JS -->
+                </div>
+
+                <div style="margin-top:12px; background:rgba(59, 130, 246, 0.1); border:1px solid rgba(59, 130, 246, 0.3); border-radius:6px; padding:10px;">
+                    <div style="font-size:0.7rem; color:#93c5fd; font-weight:600;">Operational Policy Determination:</div>
+                    <div style="font-size:0.78rem; font-weight:700; color:#fff; margin-top:2px;" id="evsiModalRecommendation">ACTIONABLE: DISPATCH_DRONE_RECON</div>
+                    <div style="font-size:0.68rem; color:#cbd5e1; margin-top:2px;" id="evsiModalExplanation">Net EVSI exceeds 0.0 pts. Fleet expects +17.23 points of operational risk mitigation by inspecting this bridge before routing convoys.</div>
+                </div>
+            </div>
+
+            <div style="margin-top:16px; text-align:right;">
+                <button onclick="closeEvsiModal()" style="background:#1e293b; color:#fff; border:1px solid var(--border-strong); padding:6px 14px; border-radius:5px; cursor:pointer; font-size:0.72rem;">Close Inspector</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let twinData = null;
+        let counterfactualData = null;
+        let isCounterfactualMode = false;
+        let isGuidedMissionRunning = false;
+        let animClock = 0;
+        let buildingsBuilt = false;   // build city once after first graph data fetch
+        let lastBuiltScenario = null;
+
+        // ── Three.js Scene Setup ──────────────────────────────────────────────────
+        const container = document.getElementById("viewportBox");
+        const canvas = document.getElementById("webglCanvas");
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a1220);
+        scene.fog = new THREE.FogExp2(0x0a1220, 0.00055);
+
+        const camera = new THREE.PerspectiveCamera(42, container.clientWidth / container.clientHeight, 1, 4000);
+        camera.position.set(300, 380, 450);
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.45;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.target.set(140, 0, -56);
+        controls.maxPolarAngle = Math.PI / 2.12;
+        controls.minDistance = 40;
+        controls.maxDistance = 1500;
+        controls.update();
+
+        // ── Lighting ──────────────────────────────────────────────────────────────
+        const hemiLight = new THREE.HemisphereLight(0xb8cce4, 0x2c3a4a, 2.4);
+        scene.add(hemiLight);
+
+        const sunLight = new THREE.DirectionalLight(0xfff0d0, 3.6);
+        sunLight.position.set(320, 520, 200);
+        sunLight.castShadow = true;
+        sunLight.shadow.mapSize.width = 2048;
+        sunLight.shadow.mapSize.height = 2048;
+        sunLight.shadow.camera.near = 10;
+        sunLight.shadow.camera.far = 2000;
+        sunLight.shadow.camera.left = -600;
+        sunLight.shadow.camera.right = 600;
+        sunLight.shadow.camera.top = 600;
+        sunLight.shadow.camera.bottom = -600;
+        sunLight.shadow.bias = -0.0005;
+        scene.add(sunLight);
+
+        const fillLight = new THREE.DirectionalLight(0x4488cc, 1.0);
+        fillLight.position.set(-250, 180, -200);
+        scene.add(fillLight);
+
+        const ambientLight = new THREE.AmbientLight(0x223344, 1.8);
+        scene.add(ambientLight);
+
+        // ── Ground ────────────────────────────────────────────────────────────────
+        const groundGeo = new THREE.PlaneGeometry(1600, 1600);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x141c24, roughness: 0.97, metalness: 0.01 });
+        const groundMesh = new THREE.Mesh(groundGeo, groundMat);
+        groundMesh.rotation.x = -Math.PI / 2;
+        groundMesh.position.y = -0.5;
+        groundMesh.receiveShadow = true;
+        scene.add(groundMesh);
+
+        // Subtle block grid overlay
+
+
+        // ── Groups ────────────────────────────────────────────────────────────────
+        const graphGroup = new THREE.Group();
+        const buildingsGroup = new THREE.Group();
+        const vehiclesGroup = new THREE.Group();
+        const waterGroup = new THREE.Group();
+        scene.add(waterGroup);
+        scene.add(buildingsGroup);
+        scene.add(graphGroup);
+        scene.add(vehiclesGroup);
+
+        // ── Water (Scenario B): river channel between left/right clusters ────────
+        // River gap center at world x=168 (between nodes x=30 [world 56] and x=50 [world 280])
+        const RIVER_X = 168;
+        const RIVER_WIDTH = 190;
+        const RIVER_LEN = 760;
+
+        const channelGeo = new THREE.PlaneGeometry(RIVER_WIDTH, RIVER_LEN);
+        const channelMat = new THREE.MeshStandardMaterial({
+            color: 0x063a6e, emissive: 0x041830, emissiveIntensity: 0.7,
+            metalness: 0.92, roughness: 0.04, transparent: true, opacity: 0.94
+        });
+        const channelMesh = new THREE.Mesh(channelGeo, channelMat);
+        channelMesh.rotation.x = -Math.PI / 2;
+        channelMesh.position.set(RIVER_X, 0.1, -56);
+        waterGroup.add(channelMesh);
+
+        // Shallow flood fringe
+        const fringeGeo = new THREE.PlaneGeometry(RIVER_WIDTH + 80, RIVER_LEN);
+        const fringeMat = new THREE.MeshStandardMaterial({
+            color: 0x0a4a8a, emissive: 0x062040, emissiveIntensity: 0.12,
+            metalness: 0.65, roughness: 0.25, transparent: true, opacity: 0.22
+        });
+        const fringeMesh = new THREE.Mesh(fringeGeo, fringeMat);
+        fringeMesh.rotation.x = -Math.PI / 2;
+        fringeMesh.position.set(RIVER_X, 0.05, -56);
+        waterGroup.add(fringeMesh);
+
+        function resizeRenderer() {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+        window.addEventListener("resize", resizeRenderer);
+
+        function setCameraView(type) {
+            if (type === 'iso') {
+                camera.position.set(300, 380, 450);
+                controls.target.set(140, 0, -56);
+            } else if (type === 'top') {
+                camera.position.set(168, 700, 0.1);
+                controls.target.set(168, 0, -56);
+            } else if (type === 'bridge') {
+                camera.position.set(168, 160, 280);
+                controls.target.set(168, 10, -56);
+            }
+            controls.update();
+        }
+
+        // ── Coordinate Mapping ────────────────────────────────────────────────────
+        function worldPos(x, y) {
+            return new THREE.Vector3((x - 25) * 11.2, 0, (25 - y) * 11.2);
+        }
+
+        // ── Seeded pseudo-random ──────────────────────────────────────────────────
+        function seededRand(seed) {
+            const s = Math.sin(seed * 9301 + 49297) * 233280;
+            return s - Math.floor(s);
+        }
+
+        // ── HTML Overlay Label System (replaces canvas sprites) ──────────────────
+        // Labels are HTML divs positioned via camera projection each frame.
+        const _facilityLabels = []; // [{el, wx, wz, worldY}]
+
+        function _clearFacilityLabels() {
+            const container = document.getElementById('css2dContainer');
+            if (container) container.innerHTML = '';
+            _facilityLabels.length = 0;
+        }
+
+        function _createFacilityLabel(node, wx, wz, worldY, isDepot, isIsolated, hasRoute, isHosp) {
+            const container = document.getElementById('css2dContainer');
+            if (!container) return;
+            const icon = isDepot ? '📦' : (isIsolated ? '⛔' : (isHosp ? '🏥' : '🏕'));
+            const shortName = node.name.replace('Hospital','Hosp').replace('Emergency','ER').replace('Shelter','Shlt');
+            let sub = '';
+            if (isDepot)         { sub = 'Central Hub'; }
+            else if (isIsolated) { sub = '⛔ UNREACHABLE'; }
+            else if (!hasRoute)  { sub = '⚠ NO ROUTE [' + node.demand + 'p P' + node.priority + ']'; }
+            else                 { sub = '✓ PLANNED [' + node.demand + 'p · P' + node.priority + ']'; }
+            const cls = isDepot ? 'depot' : (isIsolated || (!hasRoute && !isDepot)) ? 'warning' : '';
+            const el = document.createElement('div');
+            el.className = 'facility-label' + (cls ? ' ' + cls : '');
+            el.innerHTML = '<div class="lbl-name">' + icon + ' ' + shortName + '</div>'
+                         + '<div class="lbl-sub">' + sub + '</div>';
+            container.appendChild(el);
+            _facilityLabels.push({ el, wx, wz, worldY });
+        }
+
+        function _updateLabelPositions() {
+            if (!camera || !renderer) return;
+            const cW = renderer.domElement.clientWidth  || renderer.domElement.width;
+            const cH = renderer.domElement.clientHeight || renderer.domElement.height;
+            const v = new THREE.Vector3();
+            for (const lbl of _facilityLabels) {
+                v.set(lbl.wx, lbl.worldY, lbl.wz);
+                v.project(camera);
+                if (v.z > 1.0 || Math.abs(v.x) > 1.4 || Math.abs(v.y) > 1.4) {
+                    lbl.el.style.display = 'none'; continue;
+                }
+                lbl.el.style.display = 'block';
+                lbl.el.style.left = ((v.x * 0.5 + 0.5) * cW) + 'px';
+                lbl.el.style.top  = ((-v.y * 0.5 + 0.5) * cH) + 'px';
+            }
+        }
+
+        // makeTextSprite: stub — call-sites replaced; returns null safely
+        function makeTextSprite(text, opts) { return null; }
+
+        // ── Explicit Bridge Segment Registry (Scenario B canonical bridges) ────────
+        // Keys are 'min-max' node ID strings. Do NOT use distance heuristic.
+        const BRIDGE_SEGMENT_IDS = new Set(['2-9', '5-12', '8-15']);
+        function bridgeKey(u, v) { return Math.min(u,v) + '-' + Math.max(u,v); }
+        // Track animated objects for pulsing
+        const pulsingObjects = []; // {mesh, mat, baseEmit, amp}
+
+        // ── Low-poly tree factory ──────────────────────────────────────────────────
+        function makeLowPolyTree(x, z, seed) {
+            const grp = new THREE.Group();
+            const h = 12 + seededRand(seed) * 10;
+            const trunk = new THREE.Mesh(
+                new THREE.CylinderGeometry(1, 1.4, h * 0.4, 6),
+                new THREE.MeshStandardMaterial({ color: 0x6b4226, roughness: 0.9 })
+            );
+            trunk.position.set(x, h * 0.2, z);
+            grp.add(trunk);
+            const leafColors = [0x2d6a4f, 0x40916c, 0x52b788, 0x1b4332];
+            const leafCol = leafColors[Math.floor(seededRand(seed+1) * leafColors.length)];
+            const canopy = new THREE.Mesh(
+                new THREE.ConeGeometry(h * 0.38, h * 0.7, 7),
+                new THREE.MeshStandardMaterial({ color: leafCol, roughness: 0.8, flatShading: true })
+            );
+            canopy.position.set(x, h * 0.75, z);
+            grp.add(canopy);
+            return grp;
+        }
+
+        // ── Point-to-segment distance ─────────────────────────────────────────────
+        function pointSegDist(px, pz, ax, az, bx, bz) {
+            const dx = bx - ax, dz = bz - az;
+            const lenSq = dx * dx + dz * dz;
+            if (lenSq < 0.0001) return Math.sqrt((px-ax)**2 + (pz-az)**2);
+            const t = Math.max(0, Math.min(1, ((px-ax)*dx + (pz-az)*dz) / lenSq));
+            return Math.sqrt((ax + t*dx - px)**2 + (az + t*dz - pz)**2);
+        }
+
+        // ── Dense Procedural City Grid ────────────────────────────────────────────
+        // Called AFTER first graph fetch so buildings avoid road corridors
+        function buildProceduralBuildings(nodes, edges) {
+            while (buildingsGroup.children.length > 0) {
+                const child = buildingsGroup.children[0];
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) child.material.dispose();
+                buildingsGroup.remove(child);
+            }
+            const nodeMap = {};
+            nodes.forEach(n => { nodeMap[n.id] = worldPos(n.x, n.y); });
+            const edgeSegs = edges.map(e => {
+                const a = nodeMap[e.u] || new THREE.Vector3();
+                const b = nodeMap[e.v] || new THREE.Vector3();
+                return { ax: a.x, az: a.z, bx: b.x, bz: b.z };
+            });
+            const nodePts = nodes.map(n => nodeMap[n.id] || new THREE.Vector3());
+            const ROAD_EXCL = 26, NODE_EXCL = 22;
+            function isForbidden(bx, bz) {
+                if (bx > 75 && bx < 262) return true;  // river corridor
+                for (const s of edgeSegs) {
+                    if (pointSegDist(bx, bz, s.ax, s.az, s.bx, s.bz) < ROAD_EXCL) return true;
+                }
+                for (const np of nodePts) {
+                    if ((bx-np.x)**2 + (bz-np.z)**2 < NODE_EXCL**2) return true;
+                }
+                return false;
+            }
+            // District color palettes — Cities:Skylines inspired
+            const palettes = {
+                residential: [0xe8c99a, 0xd4a96a, 0xf0d5a8, 0xc8956c, 0xe6b887, 0xf5e0c0],
+                commercial:  [0x7ec8e3, 0x4a9eba, 0x89d0e8, 0x3a8eaa, 0x9dd8f0, 0x6ab4d0],
+                office:      [0xa8c8e8, 0xc8dff0, 0x88aed0, 0xb0cce0, 0xd8eaf8, 0x78a0c0],
+                industrial:  [0xa89880, 0x8a7a68, 0xc0a888, 0x706050, 0xb8a080, 0x9a8870],
+            };
+            const roofPalette = [0xf87171, 0xfbbf24, 0x34d399, 0x60a5fa, 0xa78bfa, 0xf472b6, 0xfb923c];
+            const unitBox = new THREE.BoxGeometry(1, 1, 1);
+            const HALF_X = 560, HALF_Z = 290, CELL = 40;
+            for (let ci = 0; ci * CELL < HALF_X * 2; ci++) {
+                for (let ri = 0; ri * CELL < HALF_Z * 2; ri++) {
+                    const cellCX = -HALF_X + ci * CELL + CELL * 0.5;
+                    const cellCZ = -HALF_Z + ri * CELL + CELL * 0.5;
+                    const seed0 = ci * 1000 + ri;
+                    if (seededRand(seed0 + 99) < 0.22) {
+                        // Plant some trees in open plazas
+                        if (seededRand(seed0 + 77) < 0.4 && !isForbidden(cellCX, cellCZ)) {
+                            const tCount = 1 + Math.floor(seededRand(seed0+78)*3);
+                            for (let ti = 0; ti < tCount; ti++) {
+                                const tx = cellCX + (seededRand(seed0+ti*3+1)-0.5)*CELL*0.7;
+                                const tz = cellCZ + (seededRand(seed0+ti*3+2)-0.5)*CELL*0.7;
+                                if (!isForbidden(tx, tz)) {
+                                    const tree = makeLowPolyTree(tx, tz, seed0+ti*7+3);
+                                    buildingsGroup.add(tree);
+                                }
+                            }
+                        }
+                        continue;
+                    }
+                    const cx = cellCX - 168, cz = cellCZ + 56;
+                    const distCenter = Math.sqrt(cx*cx + cz*cz);
+                    // Determine district type by location
+                    let distType, hBase, hRange;
+                    if (distCenter < 130) {
+                        distType = seededRand(seed0+50) < 0.5 ? 'office' : 'commercial';
+                        hBase = 60; hRange = 130;
+                    } else if (distCenter < 250) {
+                        distType = seededRand(seed0+51) < 0.6 ? 'residential' : 'commercial';
+                        hBase = 18; hRange = 55;
+                    } else {
+                        distType = seededRand(seed0+52) < 0.4 ? 'residential' : 'industrial';
+                        hBase = 8; hRange = 24;
+                    }
+                    const subCount = 1 + Math.floor(seededRand(seed0+98) * 2);
+                    for (let s = 0; s < subCount; s++) {
+                        const seed1 = seed0 * 10 + s;
+                        const ox = (seededRand(seed1+1)-0.5) * (CELL * 0.52);
+                        const oz = (seededRand(seed1+2)-0.5) * (CELL * 0.52);
+                        const bx = cellCX + ox, bz = cellCZ + oz;
+                        if (isForbidden(bx, bz)) continue;
+                        const bh = hBase + seededRand(seed1+3) * hRange;
+                        const bw = 10 + seededRand(seed1+4) * 11;
+                        const bd = 10 + seededRand(seed1+5) * 11;
+                        const pal = palettes[distType];
+                        const col = pal[Math.floor(seededRand(seed1+6) * pal.length)];
+                        // Main building body
+                        const mat = new THREE.MeshStandardMaterial({
+                            color: col,
+                            roughness: 0.4 + seededRand(seed1+7) * 0.3,
+                            metalness: distType === 'commercial' || distType === 'office' ? 0.45 : 0.08
+                        });
+                        const mesh = new THREE.Mesh(unitBox, mat);
+                        mesh.position.set(bx, bh/2, bz);
+                        mesh.scale.set(bw, bh, bd);
+                        mesh.castShadow = true;
+                        mesh.receiveShadow = true;
+                        buildingsGroup.add(mesh);
+                        // Colored roof accent
+                        if (seededRand(seed1+9) < 0.45) {
+                            const rCol = roofPalette[Math.floor(seededRand(seed1+10) * roofPalette.length)];
+                            const roof = new THREE.Mesh(
+                                new THREE.BoxGeometry(bw + 0.5, 1.8, bd + 0.5),
+                                new THREE.MeshStandardMaterial({ color: rCol, emissive: rCol, emissiveIntensity: 0.15 })
+                            );
+                            roof.position.set(bx, bh + 0.9, bz);
+                            buildingsGroup.add(roof);
+                        }
+                        // Stepped setback on tall towers
+                        if (bh > 80 && seededRand(seed1+11) < 0.6) {
+                            const top = new THREE.Mesh(
+                                new THREE.BoxGeometry(bw*0.65, bh*0.35, bd*0.65),
+                                new THREE.MeshStandardMaterial({ color: col, roughness: 0.2, metalness: 0.6 })
+                            );
+                            top.position.set(bx, bh + bh*0.175, bz);
+                            buildingsGroup.add(top);
+                        }
+                        // Window glow on commercial/office at night
+                        if ((distType === 'commercial' || distType === 'office') && bh > 30) {
+                            const wCol = seededRand(seed1+12) < 0.5 ? 0xfef08a : 0xbae6fd;
+                            const windowMat = new THREE.MeshBasicMaterial({ color: wCol, transparent: true, opacity: 0.35 });
+                            for (let wf = 0; wf < 3; wf++) {
+                                const win = new THREE.Mesh(new THREE.BoxGeometry(bw+0.3, bh*0.3, bd+0.3), windowMat);
+                                win.position.set(bx, bh*(0.2+wf*0.25), bz);
+                                buildingsGroup.add(win);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        let lastRenderedStateKey = "";
+
+        function disposeHierarchy(obj) {
+            if (!obj) return;
+            for (let i = obj.children.length - 1; i >= 0; i--) {
+                disposeHierarchy(obj.children[i]);
+            }
+            if (obj.geometry) {
+                obj.geometry.dispose();
+            }
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => {
+                        if (m.map) m.map.dispose();
+                        m.dispose();
+                    });
+                } else {
+                    if (obj.material.map) obj.material.map.dispose();
+                    obj.material.dispose();
+                }
+            }
+            if (obj.parent) {
+                obj.parent.remove(obj);
+            }
+        }
+
+        async function fetchState() {
+            try {
+                const res = await fetch("/api/state", { credentials: "include" });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                twinData = await res.json();
+                updateUI();
+                
+                // State-versioning: Only trigger expensive 3D graph rebuild if graph structure or routes changed
+                const currentStateKey = [
+                    twinData.scenario_mode,
+                    (twinData.routes ? twinData.routes.length : 0),
+                    (twinData.verification_queue ? twinData.verification_queue.length : 0),
+                    (twinData.scout_history ? twinData.scout_history.length : 0),
+                    twinData.kpi.active_closures_count,
+                    isCounterfactualMode
+                ].join('|');
+
+                if (currentStateKey !== lastRenderedStateKey) {
+                    lastRenderedStateKey = currentStateKey;
+                    rebuildGraph3D(true);
+                }
+                return twinData;
+            } catch (err) {
+                console.error("Failed to fetch state:", err);
+                return null;
+            }
+        }
+
+        async function switchScenario(mode) {
+            if (isCounterfactualMode) {
+                await toggleCounterfactualMode();
+            }
+            document.getElementById("btnScenarioA").classList.toggle("active", mode === "A");
+            document.getElementById("btnScenarioB").classList.toggle("active", mode === "B");
+            const res = await fetch(`/api/switch_scenario/${mode}`, { method: "POST", credentials: "include" });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(`Scenario switch failed: ${err.detail || res.statusText}`);
+            }
+            return await fetchState();
+        }
+
+        async function ingestNextIncident() {
+            const btn = document.getElementById("btnIngest");
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                Triaging via Nemotron 3.5...
+            `;
+            try {
+                const res = await fetch("/api/ingest_next_incident", { method: "POST", credentials: "include" });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    const msg = `Ingestion Error: ${err.detail || res.statusText || "Server error"}`;
+                    alert(msg);
+                    throw new Error(msg);
+                }
+                const data = await res.json();
+                await fetchState();
+                return data;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Ingest Next Incident (Nemotron Live)
+                `;
+            }
+        }
+
+        async function dispatchDrone(incidentId) {
+            const btn = document.getElementById(`recon_btn_${incidentId}`);
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `
+                    <svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/></svg>
+                    Drone En Route...
+                `;
+            }
+            try {
+                const res = await fetch("/api/dispatch_drone_recon", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ incident_id: incidentId })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    const msg = `Mission Rejected by Governor: ${data.detail || res.statusText || "Server error"}`;
+                    alert(msg);
+                    throw new Error(msg);
+                }
+                await fetchState();
+                return data;
+            } catch (err) {
+                if (!err.message.startsWith("Mission Rejected")) alert(`Recon request failed: ${err.message}`);
+                throw err;
+            }
+        }
+
+        async function submitOperatorDecision(incidentId, approveClosure) {
+            try {
+                const res = await fetch("/api/operator_action", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        incident_id: incidentId,
+                        approve_closure: approveClosure,
+                        operator_display_name: "Human Watch Officer"
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    const msg = `Operator Action Failed: ${data.detail || res.statusText || "Server error"}`;
+                    alert(msg);
+                    throw new Error(msg);
+                }
+                await fetchState();
+                return data;
+            } catch (err) {
+                if (!err.message.startsWith("Operator Action")) alert(`Action failed: ${err.message}`);
+                throw err;
+            }
+        }
+
+        function updateUI() {
+            if (!twinData) return;
+            document.getElementById("scenarioDesc").innerText = twinData.scenario_desc;
+            
+            // Only update top KPIs with live plan if NOT currently viewing the counterfactual baseline
+            if (!isCounterfactualMode) {
+                document.getElementById("kpiDelivery").innerText = twinData.kpi.delivery_ratio_pct + "%";
+                document.getElementById("kpiDelivery").style.color = "var(--accent-green)";
+                document.getElementById("kpiDistance").innerText = twinData.kpi.total_distance_km + " km";
+            }
+            document.getElementById("kpiViolations").innerText = twinData.kpi.hard_violations + " FATAL";
+            document.getElementById("kpiClosures").innerText = twinData.kpi.active_closures_count + " Segments";
+            document.getElementById("kpiBudget").innerText = `${twinData.recon_budget.remaining} / ${twinData.recon_budget.total} Left`;
+            const rawClock = twinData.sim_clock_minutes;
+            const capClock = Math.min(rawClock, 480);
+            const clockBeyond = rawClock > 480 ? ` (+${(rawClock - 480).toFixed(0)}m beyond horizon)` : '';
+            document.getElementById("kpiClock").innerText = `T+ ${capClock.toFixed(1)}m (Sim)${clockBeyond}`;
+            document.getElementById("kpiClock").style.color = rawClock > 480 ? '#f59e0b' : '#c084fc';
+            document.getElementById("hudMode").innerText = `Mode: ${twinData.scenario_mode} (${twinData.scenario_name.split(':')[0]})`;
+
+            // Queue
+            const qBox = document.getElementById("queueContainer");
+            document.getElementById("queueCount").innerText = `${twinData.verification_queue.length} PENDING`;
+            if (twinData.verification_queue.length === 0) {
+                qBox.innerHTML = '<p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;">No unverified reports in queue.</p>';
+            } else {
+                qBox.innerHTML = twinData.verification_queue.map(q => {
+                    const safeId = escapeHTML(q.incident_id);
+                    const safeText = escapeHTML(q.text);
+                    const isPositive = q.evsi > 0.0;
+                    
+                    let actionHtml = '';
+                    if (!q.has_observation) {
+                        actionHtml = `
+                            <button class="btn-recon" id="recon_btn_${safeId}" onclick="dispatchDrone('${safeId}')" ${twinData.recon_budget.remaining <= 0 ? 'disabled' : ''}>
+                                <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/></svg>
+                                Dispatch Drone Recon Flight (Sensor η=0.999)
+                            </button>`;
+                    } else {
+                        actionHtml = `
+                            <div style="background:var(--bg-card); padding:8px; border-radius:5px; margin-top:6px; border:1px solid var(--border-strong);">
+                                <div style="font-size:0.72rem; color:#38bdf8; font-weight:600; display:flex; align-items:center; gap:5px;">
+                                    <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    Scout Observation: ${escapeHTML(q.observation_verdict)}
+                                </div>
+                                <div style="font-size:0.68rem; color:var(--text-tertiary); margin:3px 0;">
+                                    Human Operator Authorization Required:
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-approve" onclick="submitOperatorDecision('${safeId}', true)">Confirm Road Closure</button>
+                                    <button class="btn-dismiss" onclick="submitOperatorDecision('${safeId}', false)">Dismiss Rumor as False</button>
+                                </div>
+                            </div>`;
+                    }
+
+                    return `
+                    <div class="scout-queue-item">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong style="color:#e2e8f0; font-size:0.75rem;">Incident ${safeId}</strong>
+                            <span class="${isPositive ? 'evsi-badge-pos' : 'evsi-badge-neg'}" style="cursor:pointer;" onclick="openEvsiInspector('${safeId}')" title="Click to view full mathematical decision breakdown">
+                                EVSI: ${q.evsi > 0 ? '+' : ''}${q.evsi} pts (${isPositive ? 'WORTH SCOUTING' : 'DO NOT SCOUT'}) ⓘ
+                            </span>
+                        </div>
+                        <p style="font-size:0.71rem; color:#cbd5e1; margin-top:4px; line-height:1.3;">"${safeText}"</p>
+                        <p style="font-size:0.68rem; color:var(--text-tertiary); margin-top:3px; font-family:var(--font-mono);">
+                            Segment: <strong>${q.segment[0]} ↔ ${q.segment[1]}</strong> | AI Extraction Conf: ${(q.confidence*100).toFixed(0)}%
+                        </p>
+                        ${actionHtml}
+                    </div>`;
+                }).join("");
+            }
+
+            // Scout History
+            const hBox = document.getElementById("reconHistoryContainer");
+            document.getElementById("reconHistoryCount").innerText = `${twinData.scout_history.length} FLIGHTS`;
+            if (twinData.scout_history.length === 0) {
+                hBox.innerHTML = '<p style="font-size: 0.72rem; color: var(--text-tertiary);">No drone flights dispatched yet.</p>';
+            } else {
+                hBox.innerHTML = twinData.scout_history.map(h => `
+                    <div style="font-size:0.68rem; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-family:var(--font-mono); color:#cbd5e1;">${escapeHTML(h.mission_id)} (Seg ${h.segment[0]}↔${h.segment[1]})</span>
+                        <span class="mission-badge" style="background:${h.verdict === 'SCOUT_OBSERVED_CLOSED' ? 'var(--accent-red-subtle)' : 'var(--accent-green-subtle)'}; color:${h.verdict === 'SCOUT_OBSERVED_CLOSED' ? '#f87171' : '#34d399'}; border:1px solid ${h.verdict === 'SCOUT_OBSERVED_CLOSED' ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'};">
+                            ${escapeHTML(h.verdict)}
+                        </span>
+                    </div>
+                `).join("");
+            }
+
+            // Log
+            const lBox = document.getElementById("logContainer");
+            lBox.innerHTML = twinData.audit_log.map(l => `<div class="log-entry">${escapeHTML(l)}</div>`).join("");
+        }
+
+        // ── Rebuild 3D Graph: Roads, Nodes, Bridges, Routes ──────────────────────
+        // Also triggers city build on first call (so buildings can avoid roads)
+        function rebuildGraph3D(force) {
+            if (!twinData || !twinData.nodes) return;
+            if (!buildingsBuilt || lastBuiltScenario !== twinData.scenario_mode) {
+                buildProceduralBuildings(twinData.nodes, twinData.edges);
+                buildingsBuilt = true;
+                lastBuiltScenario = twinData.scenario_mode;
+            }
+            pulsingObjects.length = 0;
+            disposeHierarchy(graphGroup);
+            _clearFacilityLabels();
+
+            waterGroup.visible = (twinData.scenario_mode === 'B');
+            // Build node position map
+            const nodePosMap = {};
+            twinData.nodes.forEach(n => { nodePosMap[n.id] = worldPos(n.x, n.y); });
+            
+            // Determine active routes for the current display policy
+            const currentRoutes = (isCounterfactualMode && counterfactualData && counterfactualData.conservative_baseline)
+                ? counterfactualData.conservative_baseline.routes
+                : twinData.routes;
+
+            // Determine which facilities are isolated in current counterfactual
+            const isolatedIds = new Set();
+            if (isCounterfactualMode && counterfactualData && counterfactualData.facilities_breakdown) {
+                counterfactualData.facilities_breakdown.forEach(f => {
+                    if (f.is_isolated_in_baseline) isolatedIds.add(f.junction_id);
+                });
+            }
+            // ── Roads (asphalt slabs + lane markings) ────────────────────────────
+            twinData.edges.forEach(e => {
+                const bk = bridgeKey(e.u, e.v);
+                if (BRIDGE_SEGMENT_IDS.has(bk) && twinData.scenario_mode === 'B') return; // bridges drawn separately
+                const p1 = nodePosMap[e.u], p2 = nodePosMap[e.v];
+                if (!p1 || !p2) return;
+                const dx = p2.x-p1.x, dz = p2.z-p1.z;
+                const len = Math.sqrt(dx*dx+dz*dz);
+                if (len < 0.1) return;
+                const angle = Math.atan2(dx, dz);
+                const midX = (p1.x+p2.x)/2, midZ = (p1.z+p2.z)/2;
+                // Asphalt surface
+                const road = new THREE.Mesh(
+                    new THREE.BoxGeometry(len, 0.9, 9),
+                    new THREE.MeshStandardMaterial({
+                        color: e.is_closed ? 0x5a0a0a : 0x1e2730,
+                        emissive: e.is_closed ? 0xcc0000 : 0x000000,
+                        emissiveIntensity: e.is_closed ? 0.4 : 0,
+                        roughness: 0.92, metalness: 0.05
+                    })
+                );
+                road.position.set(midX, 0.45, midZ);
+                road.rotation.y = angle;
+                road.receiveShadow = true;
+                graphGroup.add(road);
+                // Center lane dashes (white dashes along road)
+                if (!e.is_closed) {
+                    const dashLen = 8, dashGap = 12, totalDashes = Math.floor(len / (dashLen+dashGap));
+                    for (let d = 0; d < totalDashes; d++) {
+                        const t = (d + 0.5) / totalDashes;
+                        const dashX = p1.x + dx*t, dashZ = p1.z + dz*t;
+                        const dash = new THREE.Mesh(
+                            new THREE.BoxGeometry(dashLen, 0.15, 0.6),
+                            new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.55 })
+                        );
+                        dash.position.set(dashX, 0.95, dashZ);
+                        dash.rotation.y = angle;
+                        graphGroup.add(dash);
+                    }
+                }
+                // Road shoulders (subtle gray curbs)
+                [-5, 5].forEach(offset => {
+                    const perp = new THREE.Vector3(-dz/len, 0, dx/len).multiplyScalar(offset);
+                    const curb = new THREE.Mesh(
+                        new THREE.BoxGeometry(len, 0.4, 1.2),
+                        new THREE.MeshStandardMaterial({ color: 0x374151, roughness: 1.0 })
+                    );
+                    curb.position.set(midX+perp.x, 0.65, midZ+perp.z);
+                    curb.rotation.y = angle;
+                    graphGroup.add(curb);
+                });
+            });
+            // ── Bridges (Scenario B only, explicit edge IDs) ──────────────────────
+            if (twinData.scenario_mode === 'B') {
+                twinData.edges.forEach(e => {
+                    const bk = bridgeKey(e.u, e.v);
+                    if (!BRIDGE_SEGMENT_IDS.has(bk)) return;
+                    const p1 = nodePosMap[e.u], p2 = nodePosMap[e.v];
+                    if (!p1 || !p2) return;
+                    const dx = p2.x-p1.x, dz = p2.z-p1.z;
+                    const len = Math.sqrt(dx*dx+dz*dz);
+                    const angle = Math.atan2(dx, dz);
+                    const midX = (p1.x+p2.x)/2, midZ = (p1.z+p2.z)/2;
+                    const perpX = -dz/len, perpZ = dx/len; // unit perpendicular
+                    if (e.is_closed) {
+                        // ── DESTROYED BRIDGE ─────────────────────────────────────
+                        // Approach ramp (left side, still attached)
+                        const ramp1 = new THREE.Mesh(
+                            new THREE.BoxGeometry(len*0.3, 2.8, 14),
+                            new THREE.MeshStandardMaterial({ color: 0x374151, roughness: 0.85, metalness: 0.3 })
+                        );
+                        ramp1.position.set(p1.x+dx*0.15, 5, p1.z+dz*0.15);
+                        ramp1.rotation.y = angle;
+                        graphGroup.add(ramp1);
+                        // Collapsed main span — tilted into the river
+                        const span = new THREE.Mesh(
+                            new THREE.BoxGeometry(len*0.45, 2.8, 14),
+                            new THREE.MeshStandardMaterial({ color: 0x6b2020, emissive: 0x3a0a0a, emissiveIntensity: 0.5, roughness: 0.9, metalness: 0.4 })
+                        );
+                        // Tilt + drop into water
+                        span.position.set(midX - dx*0.05, -4, midZ - dz*0.05);
+                        span.rotation.y = angle;
+                        span.rotation.x = 0.4;
+                        graphGroup.add(span);
+                        // Approach ramp (right side, still attached but tilted)
+                        const ramp2 = new THREE.Mesh(
+                            new THREE.BoxGeometry(len*0.3, 2.8, 14),
+                            new THREE.MeshStandardMaterial({ color: 0x374151, roughness: 0.85, metalness: 0.3 })
+                        );
+                        ramp2.position.set(p2.x-dx*0.15, 5, p2.z-dz*0.15);
+                        ramp2.rotation.y = angle;
+                        graphGroup.add(ramp2);
+                        // Broken pylon stump in water
+                        const stump = new THREE.Mesh(
+                            new THREE.CylinderGeometry(3.5, 4.5, 10, 8),
+                            new THREE.MeshStandardMaterial({ color: 0x4a3020, roughness: 1.0, metalness: 0.2 })
+                        );
+                        stump.position.set(midX, -5, midZ);
+                        graphGroup.add(stump);
+                        // Debris scattered in water
+                        for (let d = 0; d < 6; d++) {
+                            const dbx = midX + (seededRand(e.u*100+d*7+1)-0.5)*len*0.3;
+                            const dbz = midZ + (seededRand(e.u*100+d*7+2)-0.5)*30;
+                            const debris = new THREE.Mesh(
+                                new THREE.BoxGeometry(4+seededRand(e.u*100+d*7+3)*8, 2, 3+seededRand(e.u*100+d*7+4)*6),
+                                new THREE.MeshStandardMaterial({ color: 0x3a2a1a, roughness: 1.0 })
+                            );
+                            debris.position.set(dbx, -2+seededRand(e.u*100+d*7+5)*2, dbz);
+                            debris.rotation.y = seededRand(e.u*100+d*7+6) * Math.PI;
+                            graphGroup.add(debris);
+                        }
+                        // "DESTROYED" floating label — HTML overlay
+                        _createFacilityLabel(
+                            { name: '💀 BRIDGE DESTROYED', demand: 0, priority: 0 },
+                            midX, midZ, 42, false, true, false, false);
+                        // Red X markers at both ends
+                        [-len*0.45, len*0.45].forEach(frac => {
+                            const xMesh = new THREE.Mesh(
+                                new THREE.BoxGeometry(8, 1.5, 2),
+                                new THREE.MeshBasicMaterial({ color: 0xef4444 })
+                            );
+                            xMesh.position.set(midX+dx/len*frac, 7, midZ+dz/len*frac);
+                            xMesh.rotation.y = angle + Math.PI/4;
+                            graphGroup.add(xMesh);
+                            const xMesh2 = new THREE.Mesh(
+                                new THREE.BoxGeometry(8, 1.5, 2),
+                                new THREE.MeshBasicMaterial({ color: 0xef4444 })
+                            );
+                            xMesh2.position.set(midX+dx/len*frac, 7, midZ+dz/len*frac);
+                            xMesh2.rotation.y = angle - Math.PI/4;
+                            graphGroup.add(xMesh2);
+                        });
+                    } else {
+                        // ── OPERATIONAL / UNCERTAIN BRIDGE ───────────────────────
+                        const isUncertain = (bk === '5-12') && twinData.verification_queue &&
+                            twinData.verification_queue.some(q => q.segment && (Math.min(...q.segment)+'-'+Math.max(...q.segment)) === bk);
+                        const verified = (bk === '5-12') && twinData.scout_history &&
+                            twinData.scout_history.some(h => h.segment && (Math.min(...h.segment)+'-'+Math.max(...h.segment)) === bk);
+                        const deckCol = isUncertain ? 0xb45309 : 0x1f4e79;
+                        const railCol = isUncertain ? 0xf59e0b : 0x22c55e;
+                        const railEmit = isUncertain ? 0x78350f : 0x14532d;
+                        const emitInt  = isUncertain ? 0.7 : 0.55;
+                        // Road deck
+                        const deck = new THREE.Mesh(
+                            new THREE.BoxGeometry(len, 2.8, 15),
+                            new THREE.MeshStandardMaterial({ color: 0x374151, roughness: 0.65, metalness: 0.25 })
+                        );
+                        deck.position.set(midX, 7, midZ);
+                        deck.rotation.y = angle;
+                        deck.castShadow = true;
+                        graphGroup.add(deck);
+                        // Lane markings on bridge
+                        const bDashes = Math.floor(len / 22);
+                        for (let d = 0; d < bDashes; d++) {
+                            const t = (d+0.5)/bDashes;
+                            const dashX = p1.x+dx*t, dashZ = p1.z+dz*t;
+                            const dash = new THREE.Mesh(
+                                new THREE.BoxGeometry(10, 0.15, 0.7),
+                                new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 })
+                            );
+                            dash.position.set(dashX, 8.5, dashZ);
+                            dash.rotation.y = angle;
+                            graphGroup.add(dash);
+                        }
+                        // Side railings
+                        [-7.5, 7.5].forEach(off => {
+                            const rMat = new THREE.MeshStandardMaterial({ color: railCol, emissive: railEmit, emissiveIntensity: emitInt, metalness: 0.85, roughness: 0.15 });
+                            const rail = new THREE.Mesh(new THREE.BoxGeometry(len, 1.6, 1.4), rMat);
+                            rail.position.set(midX + perpX*off, 8.8, midZ + perpZ*off);
+                            rail.rotation.y = angle;
+                            graphGroup.add(rail);
+                            if (isUncertain) pulsingObjects.push({ mesh: rail, mat: rMat, baseEmit: emitInt, amp: 0.4 });
+                        });
+                        // Suspension towers (2 towers per bridge)
+                        [-0.28, 0.28].forEach(frac => {
+                            const tx = midX + dx*frac, tz = midZ + dz*frac;
+                            const towerMat = new THREE.MeshStandardMaterial({ color: railCol, emissive: railEmit, emissiveIntensity: emitInt, metalness: 0.9, roughness: 0.1 });
+                            const towerH = 48;
+                            const tower = new THREE.Mesh(new THREE.BoxGeometry(2.5, towerH, 2.5), towerMat);
+                            tower.position.set(tx, towerH/2 + 7, tz);
+                            graphGroup.add(tower);
+                            // Cross-beam
+                            const beam = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.8, 18), towerMat);
+                            beam.position.set(tx, towerH + 5, tz);
+                            graphGroup.add(beam);
+                            if (isUncertain) pulsingObjects.push({ mesh: tower, mat: towerMat, baseEmit: emitInt, amp: 0.4 });
+                        });
+                        // Suspension cables (diagonal lines from towers to deck)
+                        const cableMat = new THREE.MeshBasicMaterial({ color: railCol, transparent: true, opacity: 0.7 });
+                        for (let ci = 0; ci < 8; ci++) {
+                            const t = ci / 7;
+                            const cx = p1.x+dx*t, cz = p1.z+dz*t;
+                            const nearFrac = t < 0.5 ? -0.28 : 0.28;
+                            const tx = midX+dx*nearFrac, tz = midZ+dz*nearFrac;
+                            const cLen = Math.sqrt((cx-tx)**2 + (cz-tz)**2 + (48-7)**2);
+                            if (cLen < 1) continue;
+                            const cable = new THREE.Mesh(new THREE.BoxGeometry(cLen, 0.5, 0.5), cableMat);
+                            cable.position.set((cx+tx)/2, (7+48)/2+7, (cz+tz)/2);
+                            cable.lookAt(new THREE.Vector3(cx, 7, cz));
+                            graphGroup.add(cable);
+                        }
+                        // Pylons in water
+                        [-0.3, 0.3].forEach(frac => {
+                            const px = midX+dx*frac, pz = midZ+dz*frac;
+                            const pylon = new THREE.Mesh(
+                                new THREE.CylinderGeometry(3.2, 4.5, 22, 8),
+                                new THREE.MeshStandardMaterial({ color: 0x4b5563, metalness: 0.5, roughness: 0.7 })
+                            );
+                            pylon.position.set(px, -3, pz);
+                            graphGroup.add(pylon);
+                        });
+                        // Status label
+                        let lblText, lblBg, lblColor, lblBorder;
+                        const matchingScout = (bk === '5-12') && twinData.scout_history &&
+                            twinData.scout_history.find(h => h.segment && (Math.min(...h.segment)+'-'+Math.max(...h.segment)) === bk);
+                        const isVerifiedClear = matchingScout && matchingScout.verdict === 'SCOUT_OBSERVED_CLEAR';
+                        const isVerifiedClosed = matchingScout && matchingScout.verdict === 'SCOUT_OBSERVED_CLOSED';
+
+                        if (isUncertain) {
+                            lblText = '⚠ LIFELINE UNVERIFIED\nBridge 5-12 — PENDING RECON';
+                            lblBg = 'rgba(120,53,15,0.94)'; lblColor = '#fde68a'; lblBorder = 'rgba(245,158,11,0.7)';
+                        } else if (isVerifiedClear) {
+                            lblText = '✓ SCOUT VERIFIED CLEAR\nLifeline Bridge 5-12 — INTACT';
+                            lblBg = 'rgba(20,83,45,0.94)'; lblColor = '#86efac'; lblBorder = 'rgba(34,197,94,0.7)';
+                        } else if (isVerifiedClosed) {
+                            lblText = '💀 SCOUT VERIFIED COLLAPSE\nBridge 5-12 — CONFIRMED DOWN';
+                            lblBg = 'rgba(139,10,10,0.94)'; lblColor = '#fca5a5'; lblBorder = 'rgba(239,68,68,0.7)';
+                        } else {
+                            lblText = '✓ BRIDGE OPEN\nOperational Cross-River Trunk';
+                            lblBg = 'rgba(20,83,45,0.88)'; lblColor = '#86efac'; lblBorder = 'rgba(34,197,94,0.5)';
+                        }
+                        // Bridge status label — HTML overlay
+                        { const isVerified = lblText.includes('CONFIRMED DOWN');
+                          _createFacilityLabel(
+                            { name: isVerified ? '💀 Bridge 5-12 CONFIRMED CLOSED' : '✓ Bridge 5-12 OPEN',
+                              demand: 0, priority: 0 },
+                            midX, midZ, 68, false, isVerified, !isVerified, false); }
+                    }
+                });
+            }
+            // ── Facility Markers (sectors + depot) ───────────────────────────────
+            twinData.nodes.forEach(n => {
+                const p = nodePosMap[n.id];
+                if (!p) return;
+                const isDepot = (n.id === 0);
+                const isSector = n.is_sector;
+                if (!isSector && !isDepot) return;
+                const isIsolated = isolatedIds.has(n.id);
+                // Correctly evaluate route assignment against the active display policy (Dispatch vs Baseline)
+                const hasRoute = currentRoutes && currentRoutes.some(r => r.path && r.path.some(pt => pt.junc === n.id));
+                const status = isDepot ? 'depot' : isIsolated ? 'isolated' : 'ok';
+                const col = isDepot ? 0xf59e0b : (isIsolated ? 0xef4444 : 0x22c55e);
+                const emitCol = isDepot ? 0x78350f : (isIsolated ? 0x7f1d1d : 0x14532d);
+                const emitInt = isIsolated ? 0.9 : 0.65;
+                // Ground platform (hexagonal pad)
+                const pad = new THREE.Mesh(
+                    new THREE.CylinderGeometry(16, 16, 1.2, 6),
+                    new THREE.MeshStandardMaterial({ color: col, emissive: emitCol, emissiveIntensity: 0.2, roughness: 0.8 })
+                );
+                pad.position.set(p.x, 0.6, p.z);
+                graphGroup.add(pad);
+                // Facility building (distinctive low block)
+                const isHosp = n.name.includes('Hospital') || n.name.includes('Clinic') || n.name.includes('ICU') || n.name.includes('Trauma') || n.name.includes('Emergency');
+                const facBldg = new THREE.Mesh(
+                    new THREE.BoxGeometry(22, isDepot ? 14 : 12, 22),
+                    new THREE.MeshStandardMaterial({ color: isDepot ? 0xfef3c7 : (isHosp ? 0xf0f9ff : 0xf0fdf4), roughness: 0.5, metalness: 0.1 })
+                );
+                facBldg.position.set(p.x, (isDepot ? 14 : 12)/2 + 1.2, p.z);
+                facBldg.castShadow = true;
+                graphGroup.add(facBldg);
+                // Medical cross (for hospitals/clinics)
+                if (isHosp) {
+                    const cMat = new THREE.MeshStandardMaterial({ color: col, emissive: emitCol, emissiveIntensity: 0.9 });
+                    const ch = new THREE.Mesh(new THREE.BoxGeometry(18, 2.5, 5.5), cMat);
+                    ch.position.set(p.x, 14.5, p.z);
+                    graphGroup.add(ch);
+                    const cv = new THREE.Mesh(new THREE.BoxGeometry(5.5, 2.5, 18), cMat);
+                    cv.position.set(p.x, 14.5, p.z);
+                    graphGroup.add(cv);
+                } else if (isDepot) {
+                    // Star shape for depot
+                    const star = new THREE.Mesh(
+                        new THREE.BoxGeometry(20, 2.5, 6),
+                        new THREE.MeshStandardMaterial({ color: col, emissive: emitCol, emissiveIntensity: 0.9 })
+                    );
+                    star.position.set(p.x, 16, p.z);
+                    graphGroup.add(star);
+                }
+                // Tall beacon pole
+                const poleH = isDepot ? 45 : 36;
+                const poleMat = new THREE.MeshStandardMaterial({ color: col, emissive: emitCol, emissiveIntensity: emitInt, metalness: 0.3 });
+                const pole = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.8, poleH, 8), poleMat);
+                pole.position.set(p.x, poleH/2 + 1.2, p.z);
+                graphGroup.add(pole);
+                if (isIsolated) pulsingObjects.push({ mesh: pole, mat: poleMat, baseEmit: emitInt, amp: 0.5 });
+                // Halo rings
+                const ring = new THREE.Mesh(
+                    new THREE.RingGeometry(17, 24, 32),
+                    new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide, transparent: true, opacity: isIsolated ? 0.55 : 0.35 })
+                );
+                ring.rotation.x = -Math.PI/2;
+                ring.position.set(p.x, 1.5, p.z);
+                graphGroup.add(ring);
+                // Priority ring (outer)
+                if (n.priority > 8) {
+                    const outerRing = new THREE.Mesh(
+                        new THREE.RingGeometry(26, 30, 32),
+                        new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide, transparent: true, opacity: 0.22 })
+                    );
+                    outerRing.rotation.x = -Math.PI/2;
+                    outerRing.position.set(p.x, 1.8, p.z);
+                    graphGroup.add(outerRing);
+                }
+                // Point light for glow effect
+                const ptLight = new THREE.PointLight(col, isIsolated ? 2.5 : 1.5, isDepot ? 80 : 65);
+                ptLight.position.set(p.x, poleH + 5, p.z);
+                graphGroup.add(ptLight);
+                // Floating label sprite
+                const demandTxt = n.demand > 0 ? `  [${n.demand} pallets • Pri ${n.priority}]` : '  [DEPOT]';
+                const statusIcon = isDepot ? '📦' : (isIsolated ? '⛔' : (isHosp ? '🏥' : '🏕'));
+                const nameLine = statusIcon + ' ' + n.name;
+                let statusSubText = 'PLANNED DELIVERY' + demandTxt;
+                if (isDepot) {
+                    statusSubText = 'Central Logistics Hub';
+                } else if (isIsolated) {
+                    statusSubText = '⛔ UNREACHABLE — NO CONVOY ROUTE';
+                } else if (!hasRoute) {
+                    statusSubText = '⚠ NO ROUTE ASSIGNED' + demandTxt;
+                }
+                const isWarningState = isIsolated || (!isDepot && !hasRoute);
+                // HTML overlay label — camera-aware projection, always readable
+                _createFacilityLabel(n, p.x, p.z, poleH + 22, isDepot, isIsolated, hasRoute, isHosp);
+            });
+            // ── Intersection discs for junction nodes ─────────────────────────────
+            twinData.nodes.forEach(n => {
+                if (n.is_sector || n.id === 0) return;
+                const p = nodePosMap[n.id];
+                if (!p) return;
+                const disk = new THREE.Mesh(
+                    new THREE.CylinderGeometry(5, 5, 0.9, 12),
+                    new THREE.MeshStandardMaterial({ color: 0x2d3748, roughness: 0.9, metalness: 0.1 })
+                );
+                disk.position.set(p.x, 0.45, p.z);
+                graphGroup.add(disk);
+            });
+            // ── Convoy route ribbons (glowing colored paths) ──────────────────────
+            const activeRoutes = (isCounterfactualMode && counterfactualData)
+                ? counterfactualData.conservative_baseline.routes
+                : twinData.routes;
+            const routeColors = isCounterfactualMode ? [0xef4444, 0xf87171, 0xfca5a5] : [0x38bdf8, 0xa855f7, 0xfbbf24];
+            activeRoutes.forEach((r, idx) => {
+                if (!r.path || r.path.length < 2) return;
+                const col = routeColors[idx % routeColors.length];
+                for (let i = 0; i < r.path.length - 1; i++) {
+                    const a = worldPos(r.path[i].lon, r.path[i].lat);
+                    const b = worldPos(r.path[i+1].lon, r.path[i+1].lat);
+                    const sdx = b.x-a.x, sdz = b.z-a.z;
+                    const slen = Math.sqrt(sdx*sdx+sdz*sdz);
+                    if (slen < 0.1) continue;
+                    // Glowing route ribbon
+                    const rib = new THREE.Mesh(
+                        new THREE.BoxGeometry(slen, 0.5, 4.5),
+                        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.88 })
+                    );
+                    rib.position.set((a.x+b.x)/2, 1.6, (a.z+b.z)/2);
+                    rib.rotation.y = Math.atan2(sdx, sdz);
+                    graphGroup.add(rib);
+                    // Outer glow (wider, more transparent)
+                    const glow = new THREE.Mesh(
+                        new THREE.BoxGeometry(slen, 0.3, 7.5),
+                        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.28 })
+                    );
+                    glow.position.set((a.x+b.x)/2, 1.2, (a.z+b.z)/2);
+                    glow.rotation.y = Math.atan2(sdx, sdz);
+                    graphGroup.add(glow);
+                }
+            });
+            // ── Counterfactual: alert beacons on isolated facilities ──────────────
+            if (isCounterfactualMode && counterfactualData && counterfactualData.facilities_breakdown) {
+                counterfactualData.facilities_breakdown.forEach(fac => {
+                    if (!fac.is_isolated_in_baseline || !nodePosMap[fac.junction_id]) return;
+                    const p = nodePosMap[fac.junction_id];
+                    const alertRing = new THREE.Mesh(
+                        new THREE.RingGeometry(30, 38, 24),
+                        new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide, transparent: true, opacity: 0.6 })
+                    );
+                    alertRing.rotation.x = -Math.PI/2;
+                    alertRing.position.set(p.x, 2.5, p.z);
+                    graphGroup.add(alertRing);
+                });
+            }
+        }
+
+        // ── Persistent Vehicle Pool for High-Performance Animation ───────────────
+        const vehiclePool = [];
+        const bodyGeo = new THREE.BoxGeometry(8, 4.5, 15);
+        const cabGeo = new THREE.BoxGeometry(7.5, 4.0, 6);
+        const cabMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.6, roughness: 0.4 });
+
+        function getOrCreateVehicle(index, col) {
+            if (!vehiclePool[index]) {
+                const group = new THREE.Group();
+                const bodyMat = new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.5, metalness: 0.7, roughness: 0.3 });
+                const body = new THREE.Mesh(bodyGeo, bodyMat);
+                body.position.y = 4.5;
+                body.castShadow = true;
+                group.add(body);
+
+                const cab = new THREE.Mesh(cabGeo, cabMat);
+                cab.position.set(0, 5.2, 9);
+                group.add(cab);
+
+                const hl = new THREE.PointLight(col, 1.5, 48);
+                hl.position.set(0, 4, 13);
+                group.add(hl);
+
+                group.userData = { bodyMat, hl, currentColor: col };
+                vehiclesGroup.add(group);
+                vehiclePool[index] = group;
+            }
+            const v = vehiclePool[index];
+            if (v.userData.currentColor !== col) {
+                v.userData.bodyMat.color.setHex(col);
+                v.userData.bodyMat.emissive.setHex(col);
+                v.userData.hl.color.setHex(col);
+                v.userData.currentColor = col;
+            }
+            v.visible = true;
+            return v;
+        }
+
+        function updateVehicles() {
+            animClock = (animClock + 0.0028) % 1.0;
+            const activeRoutes = (isCounterfactualMode && counterfactualData && counterfactualData.conservative_baseline)
+                ? counterfactualData.conservative_baseline.routes
+                : (twinData ? twinData.routes : []);
+
+            const routeColors = isCounterfactualMode 
+                ? [0xef4444, 0xf87171] 
+                : [0x38bdf8, 0x818cf8, 0xf59e0b];
+
+            let activeCount = 0;
+            if (activeRoutes) {
+                activeRoutes.forEach((r, idx) => {
+                    if (!r.path || r.path.length < 2) return;
+                    activeCount++;
+                    const offset = idx / Math.max(activeRoutes.length, 1);
+                    const t = (animClock + offset) % 1.0;
+                    const totalPts = r.path.length;
+                    const fi = t * (totalPts - 1);
+                    const bi = Math.min(Math.floor(fi), totalPts - 2);
+                    const frac = fi - bi;
+
+                    const pA = worldPos(r.path[bi].lon, r.path[bi].lat);
+                    const pB = worldPos(r.path[bi+1].lon, r.path[bi+1].lat);
+                    const vx = pA.x + (pB.x - pA.x) * frac;
+                    const vz = pA.z + (pB.z - pA.z) * frac;
+                    const angle = Math.atan2(pB.x - pA.x, pB.z - pA.z);
+                    const col = routeColors[idx % routeColors.length];
+
+                    const veh = getOrCreateVehicle(idx, col);
+                    veh.position.set(vx, 0, vz);
+                    veh.rotation.y = angle;
+                });
+            }
+            // Hide excess vehicles in pool
+            for (let i = activeCount; i < vehiclePool.length; i++) {
+                if (vehiclePool[i]) vehiclePool[i].visible = false;
+            }
+        }
+
+        // ── Render Loop ───────────────────────────────────────────────────────────
+        let frameTime = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            frameTime += 0.016;
+
+            // Subtle water shimmer on channel
+            if (waterGroup.visible && channelMesh) {
+                channelMesh.material.opacity = 0.88 + Math.sin(frameTime * 1.1) * 0.06;
+                channelMesh.material.emissiveIntensity = 0.45 + Math.sin(frameTime * 0.8) * 0.1;
+            }
+            // Pulse uncertain bridge and isolated facility beacons
+            for (const obj of pulsingObjects) {
+                if (obj.mat) {
+                    obj.mat.emissiveIntensity = obj.baseEmit + Math.sin(frameTime * 3.0) * obj.amp;
+                }
+            }
+
+            controls.update();
+            updateVehicles();
+            _updateLabelPositions(); // update HTML label projections every frame
+            renderer.render(scene, camera);
+        }
+
+        // ── Counterfactual Mode Interactive Toggle ──────────────────────────────
+        async function toggleCounterfactualMode() {
+            const btn = document.getElementById("btnCounterfactualToggle");
+            const hudTitle = document.getElementById("hudTitle");
+            const cfCard = document.getElementById("cfTelemetryCard");
+
+            const targetMode = !isCounterfactualMode;
+
+            if (targetMode) {
+                // Fetch and validate BEFORE flipping UI state (Transactional)
+                try {
+                    const res = await fetch("/api/counterfactual_state", { credentials: "include" });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to compute counterfactual`);
+                    const data = await res.json();
+                    if (!data.conservative_baseline || !data.dispatch_sentinel) {
+                        throw new Error("Invalid schema received from counterfactual API");
+                    }
+                    counterfactualData = data;
+                    isCounterfactualMode = true;
+
+                    btn.style.background = "rgba(239, 68, 68, 0.25)";
+                    btn.style.borderColor = "#ef4444";
+                    btn.style.color = "#f87171";
+                    btn.innerHTML = `
+                        <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        Showing: Conservative Baseline (Click to Exit)
+                    `;
+                    hudTitle.innerText = "COUNTERFACTUAL: CONSERVATIVE BASELINE (NO VERIFICATION)";
+                    hudTitle.style.color = "#f87171";
+
+                    cfCard.style.display = "block";
+                    document.getElementById("cfModePill").innerText = "CONSERVATIVE POLICY ACTIVE";
+                    document.getElementById("cfModePill").style.background = "#7f1d1d";
+                    document.getElementById("cfDispatchFulfillment").innerText = counterfactualData.dispatch_sentinel.planned_fulfillment_pct + "%";
+                    document.getElementById("cfDispatchPallets").innerText = `${counterfactualData.dispatch_sentinel.pallets_delivered} / ${counterfactualData.dispatch_sentinel.total_pallets_demanded} Pallets (${counterfactualData.dispatch_sentinel.sectors_served})`;
+                    document.getElementById("cfBaselineFulfillment").innerText = counterfactualData.conservative_baseline.planned_fulfillment_pct + "%";
+                    document.getElementById("cfBaselinePallets").innerText = `${counterfactualData.conservative_baseline.pallets_delivered} / ${counterfactualData.conservative_baseline.total_pallets_demanded} Pallets (${counterfactualData.conservative_baseline.sectors_served})`;
+                    document.getElementById("cfGainNotice").innerText = `+${counterfactualData.delta.fulfillment_gain_pts} percentage points`;
+
+                    // Update top KPI cards to reflect the baseline
+                    document.getElementById("kpiDelivery").innerText = counterfactualData.conservative_baseline.planned_fulfillment_pct + "%";
+                    document.getElementById("kpiDelivery").style.color = "var(--accent-red)";
+                    document.getElementById("kpiDistance").innerText = counterfactualData.conservative_baseline.fleet_distance_km + " km (Aborted)";
+                } catch (err) {
+                    console.error("Counterfactual fetch failed:", err);
+                    isCounterfactualMode = false;
+                    counterfactualData = null;
+                    alert(`Counterfactual Activation Error: ${err.message}`);
+                    return false;
+                }
+            } else {
+                isCounterfactualMode = false;
+                counterfactualData = null;
+
+                btn.style.background = "rgba(6, 182, 212, 0.15)";
+                btn.style.borderColor = "rgba(6, 182, 212, 0.4)";
+                btn.style.color = "#38bdf8";
+                btn.innerHTML = `
+                    <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                    Compare: Dispatch vs Naive Baseline
+                `;
+                hudTitle.innerText = "3D Operational Plan Preview";
+                hudTitle.style.color = "#38bdf8";
+                cfCard.style.display = "none";
+
+                if (twinData && twinData.kpi) {
+                    document.getElementById("kpiDelivery").innerText = twinData.kpi.delivery_ratio_pct + "%";
+                    document.getElementById("kpiDelivery").style.color = "var(--accent-green)";
+                    document.getElementById("kpiDistance").innerText = twinData.kpi.total_distance_km + " km";
+                }
+            }
+            rebuildGraph3D(true);
+            return true;
+        }
+
+        // ── 1-Click Guided Mission Automation ─────────────────────────────────────
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+        async function runGuidedMission() {
+            if (isGuidedMissionRunning) return;
+            isGuidedMissionRunning = true;
+            const banner = document.getElementById("guidedMissionBanner");
+            const btn = document.getElementById("btnGuidedMission");
+            btn.disabled = true;
+
+            const setStage = (badge, title, desc) => {
+                banner.style.display = "block";
+                document.getElementById("guidedStepBadge").innerText = badge;
+                document.getElementById("guidedStepTitle").innerText = title;
+                document.getElementById("guidedStepDesc").innerText = desc;
+            };
+
+            try {
+                // Ensure counterfactual comparison is inactive prior to start
+                if (isCounterfactualMode) {
+                    await toggleCounterfactualMode();
+                }
+
+                // Step 1: Initialize Scenario B
+                setStage("STAGE 1 / 5: CRISIS DEPLOYMENT", "Scenario B Initialized", "Pacific barrier flooding has destroyed Bridges 2-9 and 8-15. Bridge 5-12 is the sole lifeline crossing.");
+                await switchScenario("B");
+                setCameraView("bridge");
+                await sleep(3000);
+
+                // Step 2: Live Ingest via Nemotron
+                setStage("STAGE 2 / 5: LIVE AI TRIAGE (NVIDIA NEMOTRON 3.5 LIGHTNING)", "Ingesting Civilian Emergency Report", "Calling Nebius Token Factory to extract structured road segments from unverified ham radio signal...");
+                const ingestResult = await ingestNextIncident();
+                if (!ingestResult || !twinData || !twinData.verification_queue || twinData.verification_queue.length === 0) {
+                    throw new Error("Triage failed: No actionable candidate queued by Nemotron extraction.");
+                }
+                await sleep(2500);
+
+                // Step 3: EVSI Decision Theory Evaluation
+                const candidate = twinData.verification_queue[0];
+                const topInc = candidate.incident_id;
+                const actualEvsi = candidate.evsi;
+                const actualSeg = `${candidate.segment[0]}-${candidate.segment[1]}`;
+                
+                if (actualEvsi <= 0.0) {
+                    setStage("STAGE 3 / 5: VALUE OF INFORMATION GOVERNOR", "Negative EVSI: Zero Scouts Rational Decision",
+                        `EVSI is ${actualEvsi} pts (<= 0). Policy determines scouting is not justified. Mission complete.`);
+                    await sleep(4000);
+                    banner.style.display = "none";
+                    return;
+                }
+
+                setStage("STAGE 3 / 5: VALUE OF INFORMATION GOVERNOR", "Evaluating Restricted-Policy EVSI",
+                    `EVSI calculates +${actualEvsi.toFixed(2)} pts of operational risk mitigation. Policy determines Bridge ${actualSeg} strictly warrants reconnaissance.`);
+                await sleep(3500);
+
+                // Step 4: Dispatch Drone Recon
+                setStage("STAGE 4 / 5: AUTHORITATIVE DRONE FLIGHT", "Sensor Reconnaissance En Route",
+                    `Simulating sensor reconnaissance over Bridge ${actualSeg}. Awaiting authoritative sensor observation...`);
+                const reconRes = await dispatchDrone(topInc);
+                if (!reconRes || !reconRes.observation || !reconRes.observation.verdict) {
+                    throw new Error("Reconnaissance failed: No authoritative drone observation returned.");
+                }
+
+                const obsVerdict = reconRes.observation.verdict;
+                setStage("STAGE 4 / 5: AUTHORITATIVE DRONE FLIGHT", "Sensor Observation Received",
+                    `Sensor observation confirmed: ${obsVerdict} on Bridge ${actualSeg}. Forwarded to watch commander for approval.`);
+                await sleep(3500);
+
+                // Step 5: Authoritative Operator Decision & Route Optimization (BRANCHING BASED ON OBSERVATION)
+                if (obsVerdict === "SCOUT_OBSERVED_CLEAR") {
+                    setStage("STAGE 5 / 5: SIMULATED DEMO OPERATOR GATE & FLEET REPLAN", "Simulated Demo Operator: Dismissing False Rumor",
+                        "Watch Commander confirms Bridge 5-12 is INTACT. Dismissing rumor to preserve full fleet delivery through the eastern lifeline.");
+                    await submitOperatorDecision(topInc, false);
+                } else if (obsVerdict === "SCOUT_OBSERVED_CLOSED") {
+                    setStage("STAGE 5 / 5: SIMULATED DEMO OPERATOR GATE & FLEET REPLAN", "Simulated Demo Operator: Authorizing Official Closure",
+                        "Watch Commander confirms Bridge 5-12 is DESTROYED. Authorizing immediate road closure and fail-safe fleet rerouting.");
+                    await submitOperatorDecision(topInc, true);
+                } else {
+                    throw new Error(`Ambiguous sensor observation verdict: ${obsVerdict}`);
+                }
+
+                setCameraView("iso");
+                await sleep(3000);
+
+                // Final Step: Showcase Comparison if supported by active scenario
+                if (twinData && twinData.kpi) {
+                    const finalRatio = twinData.kpi.delivery_ratio_pct;
+                    setStage("FLAGSHIP DEMONSTRATION COMPLETE", "Decision Cycle Verified",
+                        `Authoritative workflow executed: Final Planned Fulfillment is ${finalRatio}%. Toggling comparative baseline...`);
+                    const cfOk = await toggleCounterfactualMode();
+                    if (cfOk) {
+                        await sleep(5500);
+                        await toggleCounterfactualMode(); // restore to live view
+                    }
+                }
+
+                banner.style.display = "none";
+            } catch (err) {
+                console.error("Guided mission error:", err);
+                setStage("GUIDED MISSION HALTED", "Mission Stopped on Error", err.message);
+                await sleep(4500);
+                banner.style.display = "none";
+            } finally {
+                isGuidedMissionRunning = false;
+                btn.disabled = false;
+            }
+        }
+
+        // ── EVSI Mathematical Inspector Modal Handlers ─────────────────────────────
+        async function openEvsiInspector(incidentId) {
+            const modal = document.getElementById("evsiModal");
+            const grid = document.getElementById("evsiModalGrid");
+            modal.style.display = "flex";
+            grid.innerHTML = '<div style="color:var(--text-tertiary); font-size:0.75rem;">Loading mathematical terms from runtime solver...</div>';
+
+            try {
+                const res = await fetch(`/api/evsi_inspector/${incidentId}`, { credentials: "include" });
+                if (!res.ok) {
+                    grid.innerHTML = '<div style="color:var(--accent-red);">Failed to load EVSI breakdown for this incident.</div>';
+                    return;
+                }
+                const data = await res.json();
+                grid.innerHTML = `
+                    <div style="grid-column:span 2; background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.25); border-radius:6px; padding:8px 12px; font-size:0.68rem; text-align:center;">
+                        <div style="color:#38bdf8; font-weight:700; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">RESTRICTED-POLICY EVSI FORMULATION</div>
+                        <div style="font-family:var(--font-mono); color:#e2e8f0; font-size:0.75rem; letter-spacing:0.01em; line-height:1.5;">
+                            EVSI<sub style="font-size:0.6rem;">R</sub>
+                            &nbsp;=&nbsp; E<sub style="font-size:0.6rem;">y</sub>[E<sub style="font-size:0.6rem;">x|y</sub>[U(&pi;<sub style="font-size:0.6rem;">R</sub>(y),&thinsp;x)]]
+                            &nbsp;&minus;&nbsp; E<sub style="font-size:0.6rem;">x</sub>[U(&pi;<sub style="font-size:0.6rem;">0</sub>,&thinsp;x)]
+                            &nbsp;&minus;&nbsp; C<sub style="font-size:0.6rem;">recon</sub>
+                        </div>
+                        <div style="color:var(--text-tertiary); font-size:0.60rem; margin-top:4px; line-height:1.4;">
+                            &pi;<sub>R</sub>(y): post-observation restricted policy &nbsp;&bull;&nbsp;
+                            E<sub>x|y</sub>: expectation over physical state given sensor observation y &nbsp;&bull;&nbsp;
+                            E<sub>x</sub>[U(&pi;<sub>0</sub>,x)]: prior expected utility under default policy
+                        </div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">CANDIDATE SEGMENT</div>
+                        <div style="color:#fff; font-weight:700; font-family:var(--font-mono); font-size:0.82rem;">Junction ${data.candidate_segment[0]} ↔ ${data.candidate_segment[1]}</div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">EXTRACTION MODEL</div>
+                        <div style="color:#60a5fa; font-weight:600; font-family:var(--font-mono); font-size:0.72rem;">${escapeHTML(data.extraction_model)}</div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">PRIOR P(CLOSED) — Uncalibrated (Nemotron)</div>
+                        <div style="color:#fbbf24; font-weight:700; font-family:var(--font-mono); font-size:0.82rem;">${data.prior_probability_closed}</div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">SENSOR RELIABILITY (η)</div>
+                        <div style="color:#34d399; font-weight:700; font-family:var(--font-mono); font-size:0.82rem;">${(data.drone_sensor_reliability * 100).toFixed(1)}%</div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">PRE-OBSERVATION UTILITY E[U]</div>
+                        <div style="color:#cbd5e1; font-weight:600; font-family:var(--font-mono); font-size:0.82rem;">${data.pre_observation_utility} pts</div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">POST-OBSERVATION EXPECTED E[U]</div>
+                        <div style="color:#38bdf8; font-weight:700; font-family:var(--font-mono); font-size:0.82rem;">${data.post_observation_expected_utility} pts</div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
+                        <div style="color:var(--text-tertiary); font-size:0.65rem;">VERIFICATION FLIGHT COST</div>
+                        <div style="color:#94a3b8; font-weight:600; font-family:var(--font-mono); font-size:0.82rem;">-${data.verification_cost} pts</div>
+                    </div>
+                    <div style="background:var(--bg-card); padding:8px; border-radius:5px; border:1px solid rgba(56, 189, 248, 0.4); background:rgba(56, 189, 248, 0.08);">
+                        <div style="color:#38bdf8; font-size:0.65rem; font-weight:700;">NET RESTRICTED EVSI</div>
+                        <div style="color:#38bdf8; font-weight:800; font-family:var(--font-mono); font-size:1.05rem;">${data.net_restricted_evsi > 0 ? '+' : ''}${data.net_restricted_evsi} pts</div>
+                    </div>
+                    <div style="grid-column:span 2; background:rgba(100,116,139,0.08); border:1px solid rgba(100,116,139,0.2); border-radius:4px; padding:6px 8px; font-size:0.63rem; color:#64748b; font-style:italic;">
+                        Note: Displayed terms are independently rounded from full-precision intermediate values. Net EVSI is computed at full precision before rounding. Prior P(CLOSED) is an uncalibrated model-derived estimate from Nemotron confidence extraction, not an independently validated probability.
+                    </div>
+                `;
+                document.getElementById("evsiModalRecommendation").innerText = `${data.governor_status}: ${data.action_recommendation}`;
+                document.getElementById("evsiModalRecommendation").style.color = data.net_restricted_evsi > 0 ? "#34d399" : "#f87171";
+                document.getElementById("evsiModalExplanation").innerText = data.net_restricted_evsi > 0
+                    ? `Net EVSI (+${data.net_restricted_evsi} pts) exceeds verification cost. Expected fleet utility increases from ${data.pre_observation_utility} to ${data.post_observation_expected_utility} pts upon scouting.`
+                    : `Net EVSI (${data.net_restricted_evsi} pts) is negative. Expected operational gain does not justify reconnaissance battery expenditure.`;
+            } catch (err) {
+                grid.innerHTML = `<div style="color:var(--accent-red);">Error loading inspector: ${err.message}</div>`;
+            }
+        }
+
+        function closeEvsiModal() {
+            document.getElementById("evsiModal").style.display = "none";
+        }
+
+        fetchState();
+        animate();
+        setInterval(fetchState, 3000);
+    </script>
+</body>
+</html>

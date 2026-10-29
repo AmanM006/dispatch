@@ -1,0 +1,4000 @@
+{
+  "metadata": {
+    "num_scenarios": 100,
+    "verification_budget": 2,
+    "topology": "Heterogeneous River-Crossing Bottleneck (18 junctions, 3 bridges, 9 sectors)",
+    "timestamp": "2026-10-28 17:10:31 UTC"
+  },
+  "summary": {
+    "Conservative_No_Verify": {
+      "mean_delivery": 20.1,
+      "ci95_delivery": 0.91,
+      "mean_regret": 68.12,
+      "mean_distance": 35.83,
+      "total_violations": 0
+    },
+    "Random_Verification": {
+      "mean_delivery": 43.07,
+      "ci95_delivery": 7.04,
+      "mean_regret": 45.14,
+      "mean_distance": 65.81,
+      "total_violations": 0
+    },
+    "Chronological_Arrival": {
+      "mean_delivery": 50.02,
+      "ci95_delivery": 7.49,
+      "mean_regret": 38.19,
+      "mean_distance": 76.81,
+      "total_violations": 0
+    },
+    "Severity_Prioritized": {
+      "mean_delivery": 64.51,
+      "ci95_delivery": 7.72,
+      "mean_regret": 23.7,
+      "mean_distance": 94.43,
+      "total_violations": 0
+    },
+    "Operational_VOI": {
+      "mean_delivery": 75.67,
+      "ci95_delivery": 6.92,
+      "mean_regret": 12.55,
+      "mean_distance": 108.94,
+      "total_violations": 0
+    },
+    "Oracle_Upper_Bound": {
+      "mean_delivery": 88.21,
+      "ci95_delivery": 5.53,
+      "mean_regret": 0.0,
+      "mean_distance": 115.7,
+      "total_violations": 0
+    }
+  },
+  "paired_tests": {
+    "Conservative_No_Verify": {
+      "mean_diff_pp": 55.57,
+      "ci95_diff_pp": [
+        48.85,
+        62.29
+      ],
+      "t_statistic": 16.213,
+      "p_value": 1.279438206574421e-29,
+      "wins": 75,
+      "ties": 25,
+      "losses": 0
+    },
+    "Random_Verification": {
+      "mean_diff_pp": 32.6,
+      "ci95_diff_pp": [
+        24.31,
+        40.88
+      ],
+      "t_statistic": 7.715,
+      "p_value": 9.758477889637718e-12,
+      "wins": 48,
+      "ties": 49,
+      "losses": 3
+    },
+    "Chronological_Arrival": {
+      "mean_diff_pp": 25.64,
+      "ci95_diff_pp": [
+        16.95,
+        34.33
+      ],
+      "t_statistic": 5.783,
+      "p_value": 8.593424506741332e-08,
+      "wins": 40,
+      "ties": 54,
+      "losses": 6
+    },
+    "Severity_Prioritized": {
+      "mean_diff_pp": 11.15,
+      "ci95_diff_pp": [
+        3.27,
+        19.04
+      ],
+      "t_statistic": 2.773,
+      "p_value": 0.006645703841063577,
+      "wins": 23,
+      "ties": 69,
+      "losses": 8
+    }
+  },
+  "decision_traces": [
+    {
+      "scenario_id": "V3_SCEN_001",
+      "seed": 8200,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 30.77,
+        "REP_06": 0.0,
+        "REP_05": 0.45,
+        "REP_07": 0.0,
+        "REP_01": 35.05,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 36.22
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_002",
+      "seed": 8201,
+      "true_closures": [
+        [
+          4,
+          5
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          10,
+          11
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_03": 36.2,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_01": 27.89,
+        "REP_06": 0.0,
+        "REP_02": 35.64
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_003",
+      "seed": 8202,
+      "true_closures": [
+        [
+          12,
+          15
+        ],
+        [
+          13,
+          14
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 34.63,
+        "REP_02": 32.58,
+        "REP_01": 34.09,
+        "REP_05": 0.0,
+        "REP_04": 0.0,
+        "REP_06": 0.0,
+        "REP_08": 0.0,
+        "REP_07": 0.33
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_004",
+      "seed": 8203,
+      "true_closures": [
+        [
+          9,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_06": 0.0,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_03": 33.48,
+        "REP_07": 0.0,
+        "REP_02": 36.6,
+        "REP_05": 0.0,
+        "REP_01": 36.27
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_005",
+      "seed": 8204,
+      "true_closures": [
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 30.09,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_05": 0.28,
+        "REP_06": 0.0,
+        "REP_02": 36.42,
+        "REP_01": 35.31,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_006",
+      "seed": 8205,
+      "true_closures": [
+        [
+          16,
+          17
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_02": 6.9,
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_03": 7.43,
+        "REP_04": 0.0,
+        "REP_01": 27.09
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.8214,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_007",
+      "seed": 8206,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          14,
+          17
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          11,
+          14
+        ],
+        [
+          13,
+          16
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_01": 27.76,
+        "REP_03": 27.72,
+        "REP_02": 35.96,
+        "REP_08": 0.0,
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_06": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_008",
+      "seed": 8207,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          12,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_08",
+        "REP_04"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_01": 0.0,
+        "REP_02": 0.0,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_08": 9.54,
+        "REP_04": 8.15,
+        "REP_03": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.0,
+      "delivery_chrono": 0.0,
+      "delivery_rand": 0.0,
+      "delivery_conservative": 0.0
+    },
+    {
+      "scenario_id": "V3_SCEN_009",
+      "seed": 8208,
+      "true_closures": [
+        [
+          3,
+          6
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_08": 0.08,
+        "REP_01": 36.02,
+        "REP_04": 0.0,
+        "REP_07": 0.0,
+        "REP_06": 0.02,
+        "REP_02": 36.37,
+        "REP_05": 0.0,
+        "REP_03": 36.84
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_010",
+      "seed": 8209,
+      "true_closures": [
+        [
+          7,
+          8
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_07": 0.0,
+        "REP_03": 34.76,
+        "REP_08": 0.0,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_01": 36.07,
+        "REP_02": 28.46
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_011",
+      "seed": 8210,
+      "true_closures": [
+        [
+          15,
+          16
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_06",
+        "REP_08"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_01": 0.0,
+        "REP_06": 8.94,
+        "REP_03": 0.0,
+        "REP_02": 0.0,
+        "REP_08": 7.94,
+        "REP_04": 0.0,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.0,
+      "delivery_rand": 0.0,
+      "delivery_conservative": 0.0
+    },
+    {
+      "scenario_id": "V3_SCEN_012",
+      "seed": 8211,
+      "true_closures": [
+        [
+          7,
+          8
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_06"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_07": 0.0,
+        "REP_01": 34.76,
+        "REP_05": 0.0,
+        "REP_06": 0.13,
+        "REP_04": 0.0,
+        "REP_02": 0.0,
+        "REP_03": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_013",
+      "seed": 8212,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_02": 29.28,
+        "REP_01": 34.61,
+        "REP_08": 0.0,
+        "REP_05": 0.44,
+        "REP_04": 0.0,
+        "REP_06": 0.36,
+        "REP_07": 0.0,
+        "REP_03": 35.88
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_014",
+      "seed": 8213,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_02": 35.54,
+        "REP_08": 0.0,
+        "REP_03": 34.65,
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_01": 35.9,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_015",
+      "seed": 8214,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_05": 0.0,
+        "REP_02": 36.02,
+        "REP_01": 36.64,
+        "REP_03": 35.69,
+        "REP_04": 0.11,
+        "REP_06": 0.0,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_016",
+      "seed": 8215,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_01": 33.31,
+        "REP_06": 0.0,
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_07": 0.0,
+        "REP_02": 35.79,
+        "REP_03": 27.97
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_017",
+      "seed": 8216,
+      "true_closures": [
+        [
+          11,
+          14
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_01": 33.23,
+        "REP_06": 0.0,
+        "REP_02": 34.85,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_03": 29.43
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_018",
+      "seed": 8217,
+      "true_closures": [
+        [
+          7,
+          8
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_02": 36.11,
+        "REP_07": 0.01,
+        "REP_08": 3.41,
+        "REP_06": 3.19,
+        "REP_01": 33.2,
+        "REP_04": 0.0,
+        "REP_05": 4.08,
+        "REP_03": 35.75
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.9048,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.9048,
+      "delivery_rand": 0.9048,
+      "delivery_conservative": 0.119
+    },
+    {
+      "scenario_id": "V3_SCEN_019",
+      "seed": 8218,
+      "true_closures": [
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_01": 32.87,
+        "REP_08": 0.0,
+        "REP_02": 29.15,
+        "REP_03": 30.78,
+        "REP_05": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_020",
+      "seed": 8219,
+      "true_closures": [
+        [
+          12,
+          13
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_06": 0.0,
+        "REP_01": 36.03,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_04": 0.28,
+        "REP_02": 37.07,
+        "REP_08": 0.0,
+        "REP_03": 36.54
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_021",
+      "seed": 8220,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_06": 0.0,
+        "REP_03": 34.87,
+        "REP_07": 0.01,
+        "REP_02": 35.46,
+        "REP_01": 35.8,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_05": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_022",
+      "seed": 8221,
+      "true_closures": [
+        [
+          12,
+          15
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          10,
+          13
+        ],
+        [
+          13,
+          14
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_03": 34.96,
+        "REP_06": 0.0,
+        "REP_02": 32.26,
+        "REP_05": 0.0,
+        "REP_01": 30.8,
+        "REP_08": 0.07,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_023",
+      "seed": 8222,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_02": 33.49,
+        "REP_05": 0.0,
+        "REP_03": 0.0,
+        "REP_07": 0.0,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_01": 36.47
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_024",
+      "seed": 8223,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_01": 32.88,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_05": 0.1,
+        "REP_03": 35.63,
+        "REP_08": 0.0,
+        "REP_02": 37.1,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_025",
+      "seed": 8224,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          12,
+          13
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_03": 32.54,
+        "REP_01": 35.15,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 28.07,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_026",
+      "seed": 8225,
+      "true_closures": [
+        [
+          10,
+          11
+        ],
+        [
+          9,
+          10
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_02": 29.75,
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_03": 25.18,
+        "REP_06": 0.0,
+        "REP_01": 5.17
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.8571,
+      "delivery_sev": 0.8571,
+      "delivery_chrono": 0.8571,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_027",
+      "seed": 8226,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          11,
+          14
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_03": 36.34,
+        "REP_01": 29.08,
+        "REP_02": 32.85,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_028",
+      "seed": 8227,
+      "true_closures": [
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_07"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_07": 0.19,
+        "REP_04": 0.0,
+        "REP_02": 0.0,
+        "REP_06": 0.0,
+        "REP_03": 0.0,
+        "REP_01": 36.15
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_029",
+      "seed": 8228,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          11,
+          14
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_01": 31.05,
+        "REP_07": 0.0,
+        "REP_06": 0.06,
+        "REP_03": 30.88,
+        "REP_05": 0.32,
+        "REP_04": 0.0,
+        "REP_02": 36.96,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_030",
+      "seed": 8229,
+      "true_closures": [
+        [
+          10,
+          11
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_02": 31.53,
+        "REP_04": 0.0,
+        "REP_03": 36.23,
+        "REP_06": 0.0,
+        "REP_08": 0.0,
+        "REP_01": 31.71
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_031",
+      "seed": 8230,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_03": 35.9,
+        "REP_08": 0.0,
+        "REP_05": 4.37,
+        "REP_07": 0.0,
+        "REP_02": 36.82,
+        "REP_04": 3.15,
+        "REP_01": 36.96,
+        "REP_06": 3.29
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.9048,
+      "delivery_sev": 0.9048,
+      "delivery_chrono": 0.119,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.119
+    },
+    {
+      "scenario_id": "V3_SCEN_032",
+      "seed": 8231,
+      "true_closures": [
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_06": 0.0,
+        "REP_03": 28.15,
+        "REP_02": 30.69,
+        "REP_08": 0.0,
+        "REP_01": 33.68,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.9286,
+      "delivery_sev": 0.9286,
+      "delivery_chrono": 0.9286,
+      "delivery_rand": 0.9286,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_033",
+      "seed": 8232,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_03": 0.0,
+        "REP_02": 34.09,
+        "REP_07": 0.0,
+        "REP_06": 0.0,
+        "REP_04": 0.03,
+        "REP_05": 0.09,
+        "REP_01": 32.32
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_034",
+      "seed": 8233,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          9,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_01": 5.84,
+        "REP_07": 0.0,
+        "REP_03": 26.38,
+        "REP_02": 29.0,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.8571,
+      "delivery_sev": 0.8571,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_035",
+      "seed": 8234,
+      "true_closures": [
+        [
+          7,
+          8
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_06": 0.0,
+        "REP_01": 34.61,
+        "REP_04": 0.0,
+        "REP_03": 33.15,
+        "REP_02": 34.4,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_036",
+      "seed": 8235,
+      "true_closures": [
+        [
+          4,
+          5
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_04": 0.0,
+        "REP_01": 35.33,
+        "REP_03": 36.28,
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 36.47
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_037",
+      "seed": 8236,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 33.43,
+        "REP_02": 36.49,
+        "REP_01": 36.25,
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_04": 0.09
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_038",
+      "seed": 8237,
+      "true_closures": [
+        [
+          15,
+          16
+        ],
+        [
+          9,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 35.18,
+        "REP_07": 0.0,
+        "REP_03": 27.84,
+        "REP_08": 0.0,
+        "REP_01": 36.63,
+        "REP_06": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_039",
+      "seed": 8238,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_08": 0.0,
+        "REP_06": 0.03,
+        "REP_02": 28.32,
+        "REP_07": 0.0,
+        "REP_01": 25.37,
+        "REP_03": 7.07,
+        "REP_05": 0.0
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_040",
+      "seed": 8239,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_02": 33.38,
+        "REP_04": 0.0,
+        "REP_08": 0.0,
+        "REP_03": 27.05,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_01": 30.57
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_041",
+      "seed": 8240,
+      "true_closures": [
+        [
+          10,
+          13
+        ],
+        [
+          9,
+          12
+        ],
+        [
+          14,
+          17
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_02": 29.05,
+        "REP_06": 0.0,
+        "REP_01": 5.33,
+        "REP_03": 25.24,
+        "REP_04": 0.0,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.8571,
+      "delivery_sev": 0.8571,
+      "delivery_chrono": 0.8571,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_042",
+      "seed": 8241,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          14,
+          17
+        ],
+        [
+          13,
+          14
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_06": 0.36,
+        "REP_03": 36.33,
+        "REP_04": 0.0,
+        "REP_02": 36.89,
+        "REP_05": 0.61,
+        "REP_07": 0.0,
+        "REP_08": 0.0,
+        "REP_01": 31.32
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_043",
+      "seed": 8242,
+      "true_closures": [
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_03": 34.38,
+        "REP_08": 0.0,
+        "REP_07": 0.0,
+        "REP_01": 34.95,
+        "REP_04": 0.0,
+        "REP_02": 31.4,
+        "REP_05": 0.76,
+        "REP_06": 0.83
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_044",
+      "seed": 8243,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_02": 35.82,
+        "REP_04": 0.0,
+        "REP_06": 0.0,
+        "REP_08": 0.34,
+        "REP_03": 36.14,
+        "REP_01": 35.2,
+        "REP_05": 0.26
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_045",
+      "seed": 8244,
+      "true_closures": [
+        [
+          13,
+          14
+        ],
+        [
+          15,
+          16
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_02": 37.47,
+        "REP_03": 32.01,
+        "REP_04": 0.0,
+        "REP_08": 0.62,
+        "REP_05": 0.6,
+        "REP_01": 36.72
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_046",
+      "seed": 8245,
+      "true_closures": [
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_01": 33.6,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 34.24,
+        "REP_03": 36.27
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_047",
+      "seed": 8246,
+      "true_closures": [
+        [
+          13,
+          16
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_03": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 36.32,
+        "REP_08": 0.03,
+        "REP_01": 35.57
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_048",
+      "seed": 8247,
+      "true_closures": [
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_01": 34.91,
+        "REP_02": 33.83,
+        "REP_06": 0.0,
+        "REP_08": 0.0,
+        "REP_03": 36.46,
+        "REP_05": 0.0,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_049",
+      "seed": 8248,
+      "true_closures": [
+        [
+          2,
+          5
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_03": 30.64,
+        "REP_01": 35.34,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_08": 0.0,
+        "REP_02": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_050",
+      "seed": 8249,
+      "true_closures": [
+        [
+          1,
+          4
+        ],
+        [
+          10,
+          13
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_02": 22.11,
+        "REP_04": 0.09,
+        "REP_03": 24.01,
+        "REP_06": 0.0,
+        "REP_05": 0.0,
+        "REP_01": 10.78,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.75,
+      "delivery_sev": 0.75,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_051",
+      "seed": 8250,
+      "true_closures": [
+        [
+          4,
+          5
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_03": 34.0,
+        "REP_05": 0.09,
+        "REP_08": 0.0,
+        "REP_04": 4.44,
+        "REP_06": 2.94,
+        "REP_01": 34.21,
+        "REP_02": 29.76,
+        "REP_07": 3.37
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.9048,
+      "delivery_sev": 0.119,
+      "delivery_chrono": 0.9048,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.119
+    },
+    {
+      "scenario_id": "V3_SCEN_052",
+      "seed": 8251,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          12,
+          13
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_03": 36.33,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 33.5,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_01": 31.25
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_053",
+      "seed": 8252,
+      "true_closures": [
+        [
+          9,
+          10
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_03": 35.2,
+        "REP_05": 0.0,
+        "REP_01": 30.82,
+        "REP_02": 35.95,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_08": 0.01,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_054",
+      "seed": 8253,
+      "true_closures": [
+        [
+          12,
+          13
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          11,
+          14
+        ],
+        [
+          13,
+          16
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 27.53,
+        "REP_04": 0.0,
+        "REP_02": 35.56,
+        "REP_08": 0.0,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_06": 0.0,
+        "REP_01": 34.95
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_055",
+      "seed": 8254,
+      "true_closures": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_01": 0.0,
+        "REP_05": 0.0,
+        "REP_03": 36.67,
+        "REP_02": 36.65
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_056",
+      "seed": 8255,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_03": 35.34,
+        "REP_02": 29.77,
+        "REP_08": 0.0,
+        "REP_07": 0.0,
+        "REP_06": 0.0,
+        "REP_01": 35.35,
+        "REP_04": 0.01
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_057",
+      "seed": 8256,
+      "true_closures": [
+        [
+          15,
+          16
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_06": 0.08,
+        "REP_07": 0.0,
+        "REP_02": 35.42,
+        "REP_03": 32.85,
+        "REP_01": 35.33
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_058",
+      "seed": 8257,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_03": 31.14,
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_06": 0.06,
+        "REP_02": 31.36,
+        "REP_01": 35.9
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_059",
+      "seed": 8258,
+      "true_closures": [
+        [
+          5,
+          8
+        ],
+        [
+          9,
+          12
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_06": 0.0,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_01": 35.79,
+        "REP_04": 0.0,
+        "REP_03": 34.92,
+        "REP_02": 35.68,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_060",
+      "seed": 8259,
+      "true_closures": [
+        [
+          15,
+          16
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          13,
+          14
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_02": 35.73,
+        "REP_03": 32.2,
+        "REP_06": 0.0,
+        "REP_01": 37.2,
+        "REP_08": 0.0,
+        "REP_05": 0.38,
+        "REP_07": 0.27,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_061",
+      "seed": 8260,
+      "true_closures": [
+        [
+          13,
+          16
+        ],
+        [
+          9,
+          10
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_01": 34.54,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_03": 31.86,
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 31.72
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_062",
+      "seed": 8261,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          10,
+          11
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_01": 36.65,
+        "REP_02": 32.16,
+        "REP_05": 0.0,
+        "REP_04": 0.0,
+        "REP_06": 0.0,
+        "REP_08": 0.0,
+        "REP_03": 36.12,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_063",
+      "seed": 8262,
+      "true_closures": [
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_01": 36.17,
+        "REP_04": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 33.09,
+        "REP_05": 0.0,
+        "REP_03": 0.0,
+        "REP_07": 0.0,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_064",
+      "seed": 8263,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          9,
+          12
+        ],
+        [
+          11,
+          14
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_02": 35.36,
+        "REP_08": 0.0,
+        "REP_03": 32.74,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_01": 27.02,
+        "REP_04": 0.0,
+        "REP_05": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_065",
+      "seed": 8264,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_03": 34.31,
+        "REP_01": 30.16,
+        "REP_07": 0.0,
+        "REP_02": 33.55,
+        "REP_04": 0.0,
+        "REP_06": 0.0,
+        "REP_05": 0.0,
+        "REP_08": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_066",
+      "seed": 8265,
+      "true_closures": [
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_03": 35.94,
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_01": 33.73,
+        "REP_02": 36.66,
+        "REP_04": 0.0,
+        "REP_07": 0.0,
+        "REP_06": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_067",
+      "seed": 8266,
+      "true_closures": [
+        [
+          13,
+          16
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          12,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_04": 0.0,
+        "REP_01": 35.46,
+        "REP_07": 0.0,
+        "REP_03": 34.03,
+        "REP_08": 0.04,
+        "REP_02": 35.25,
+        "REP_06": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_068",
+      "seed": 8267,
+      "true_closures": [
+        [
+          13,
+          14
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          15,
+          16
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_01": 30.18,
+        "REP_06": 0.0,
+        "REP_08": 0.0,
+        "REP_03": 33.93,
+        "REP_02": 35.93,
+        "REP_05": 0.0,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_069",
+      "seed": 8268,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          9,
+          10
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_01": 35.22,
+        "REP_05": 0.0,
+        "REP_02": 32.87,
+        "REP_03": 33.81,
+        "REP_04": 0.0,
+        "REP_06": 0.01,
+        "REP_08": 0.34,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_070",
+      "seed": 8269,
+      "true_closures": [
+        [
+          12,
+          15
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_01": 33.09,
+        "REP_06": 0.0,
+        "REP_05": 0.0,
+        "REP_03": 36.44,
+        "REP_08": 0.0,
+        "REP_07": 0.28,
+        "REP_02": 36.76
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_071",
+      "seed": 8270,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "voi_selected": [
+        "REP_05",
+        "REP_04"
+      ],
+      "voi_scores": {
+        "REP_03": 0.0,
+        "REP_01": 0.0,
+        "REP_06": 3.08,
+        "REP_05": 4.04,
+        "REP_08": 2.7,
+        "REP_04": 3.35,
+        "REP_07": 0.0,
+        "REP_02": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.119,
+      "delivery_sev": 0.119,
+      "delivery_chrono": 0.119,
+      "delivery_rand": 0.119,
+      "delivery_conservative": 0.119
+    },
+    {
+      "scenario_id": "V3_SCEN_072",
+      "seed": 8271,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 28.68,
+        "REP_01": 34.7,
+        "REP_02": 36.79,
+        "REP_04": 0.4,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_08": 0.3
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_073",
+      "seed": 8272,
+      "true_closures": [
+        [
+          0,
+          1
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          15,
+          16
+        ],
+        [
+          9,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_02": 34.12,
+        "REP_04": 0.0,
+        "REP_01": 30.59,
+        "REP_03": 0.0,
+        "REP_08": 0.0,
+        "REP_05": 0.0,
+        "REP_06": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_074",
+      "seed": 8273,
+      "true_closures": [
+        [
+          13,
+          16
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_03": 33.58,
+        "REP_07": 0.0,
+        "REP_01": 36.17,
+        "REP_02": 35.7,
+        "REP_05": 0.0,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_075",
+      "seed": 8274,
+      "true_closures": [
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          13,
+          16
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_06": 0.08,
+        "REP_01": 34.16,
+        "REP_05": 0.0,
+        "REP_03": 36.2,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 31.53,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_076",
+      "seed": 8275,
+      "true_closures": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 28.3,
+        "REP_06": 0.0,
+        "REP_07": 0.04,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_01": 30.6,
+        "REP_02": 36.01,
+        "REP_05": 0.05
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_077",
+      "seed": 8276,
+      "true_closures": [
+        [
+          9,
+          12
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 29.07,
+        "REP_08": 0.0,
+        "REP_01": 36.17,
+        "REP_03": 34.89
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_078",
+      "seed": 8277,
+      "true_closures": [
+        [
+          16,
+          17
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_01": 30.95,
+        "REP_03": 35.34,
+        "REP_02": 35.47,
+        "REP_08": 0.26,
+        "REP_06": 0.6
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_079",
+      "seed": 8278,
+      "true_closures": [
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_01": 31.69,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_03": 0.0,
+        "REP_04": 0.38,
+        "REP_06": 0.94,
+        "REP_02": 36.64,
+        "REP_08": 0.69
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_080",
+      "seed": 8279,
+      "true_closures": [
+        [
+          16,
+          17
+        ],
+        [
+          9,
+          12
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_03": 30.49,
+        "REP_06": 0.0,
+        "REP_01": 32.54,
+        "REP_05": 0.2,
+        "REP_04": 0.0,
+        "REP_02": 30.45,
+        "REP_07": 0.27
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_081",
+      "seed": 8280,
+      "true_closures": [
+        [
+          1,
+          4
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_03": 34.7,
+        "REP_07": 0.0,
+        "REP_08": 0.0,
+        "REP_01": 35.74,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 35.23,
+        "REP_05": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_082",
+      "seed": 8281,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          9,
+          12
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_01": 35.97,
+        "REP_02": 36.39,
+        "REP_06": 0.0,
+        "REP_08": 0.0,
+        "REP_04": 0.0,
+        "REP_07": 0.0,
+        "REP_03": 35.11,
+        "REP_05": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_083",
+      "seed": 8282,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          11,
+          14
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_01": 34.05,
+        "REP_03": 35.04,
+        "REP_07": 0.0,
+        "REP_02": 35.77,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_04": 0.67,
+        "REP_08": 0.3
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_084",
+      "seed": 8283,
+      "true_closures": [
+        [
+          9,
+          10
+        ],
+        [
+          15,
+          16
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_08": 0.4,
+        "REP_02": 36.73,
+        "REP_01": 29.58,
+        "REP_07": 0.0,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_03": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_085",
+      "seed": 8284,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          16,
+          17
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_03": 34.83,
+        "REP_01": 34.1,
+        "REP_08": 0.0,
+        "REP_07": 0.0,
+        "REP_02": 35.01,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_086",
+      "seed": 8285,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          7,
+          8
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_03": 0.0,
+        "REP_02": 34.62,
+        "REP_08": 4.01,
+        "REP_01": 35.32,
+        "REP_06": 0.0,
+        "REP_04": 3.13,
+        "REP_05": 0.0,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.9048,
+      "delivery_sev": 0.119,
+      "delivery_chrono": 0.9048,
+      "delivery_rand": 0.9048,
+      "delivery_conservative": 0.119
+    },
+    {
+      "scenario_id": "V3_SCEN_087",
+      "seed": 8286,
+      "true_closures": [
+        [
+          16,
+          17
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 35.19,
+        "REP_08": 0.0,
+        "REP_01": 28.02,
+        "REP_05": 0.0,
+        "REP_03": 35.89,
+        "REP_07": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_088",
+      "seed": 8287,
+      "true_closures": [
+        [
+          6,
+          7
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 28.5,
+        "REP_08": 0.0,
+        "REP_03": 21.99,
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_01": 5.94
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.8571,
+      "delivery_sev": 0.8571,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.8571,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_089",
+      "seed": 8288,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_01": 33.62,
+        "REP_07": 0.0,
+        "REP_03": 35.19,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_02": 35.06,
+        "REP_08": 0.0,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_090",
+      "seed": 8289,
+      "true_closures": [
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          10,
+          13
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_03": 36.13,
+        "REP_01": 33.82,
+        "REP_06": 0.0,
+        "REP_04": 0.0,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_02": 27.16
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_091",
+      "seed": 8290,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          13,
+          16
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_03"
+      ],
+      "voi_scores": {
+        "REP_01": 35.31,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_08": 0.0,
+        "REP_02": 30.01,
+        "REP_03": 32.72,
+        "REP_06": 0.0,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_092",
+      "seed": 8291,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_03",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_02": 27.52,
+        "REP_08": 0.0,
+        "REP_06": 0.0,
+        "REP_05": 0.0,
+        "REP_03": 34.87,
+        "REP_01": 32.82,
+        "REP_04": 0.0
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_093",
+      "seed": 8292,
+      "true_closures": [
+        [
+          11,
+          14
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          9,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_08": 0.0,
+        "REP_03": 35.4,
+        "REP_04": 0.0,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_02": 36.49,
+        "REP_06": 0.0,
+        "REP_01": 36.31
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_094",
+      "seed": 8293,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          5,
+          12
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_01": 36.14,
+        "REP_03": 30.82,
+        "REP_02": 37.29,
+        "REP_06": 0.34,
+        "REP_07": 0.36,
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_04": 0.72
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_095",
+      "seed": 8294,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          14,
+          17
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_06",
+        "REP_04"
+      ],
+      "voi_scores": {
+        "REP_06": 9.68,
+        "REP_02": 0.0,
+        "REP_07": 0.0,
+        "REP_08": 8.87,
+        "REP_05": 0.0,
+        "REP_01": 0.0,
+        "REP_04": 9.3,
+        "REP_03": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.0
+    },
+    {
+      "scenario_id": "V3_SCEN_096",
+      "seed": 8295,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "voi_selected": [
+        "REP_06",
+        "REP_08"
+      ],
+      "voi_scores": {
+        "REP_08": 6.77,
+        "REP_01": 0.0,
+        "REP_06": 8.69,
+        "REP_07": 0.0,
+        "REP_05": 0.0,
+        "REP_04": 0.0,
+        "REP_02": 0.0,
+        "REP_03": 0.0
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.0,
+      "delivery_conservative": 0.0
+    },
+    {
+      "scenario_id": "V3_SCEN_097",
+      "seed": 8296,
+      "true_closures": [
+        [
+          14,
+          17
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          10,
+          13
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_04": 0.0,
+        "REP_01": 34.62,
+        "REP_05": 0.0,
+        "REP_06": 0.0,
+        "REP_07": 0.0,
+        "REP_08": 0.0,
+        "REP_03": 30.88,
+        "REP_02": 36.7
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 1.0,
+      "delivery_sev": 1.0,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_098",
+      "seed": 8297,
+      "true_closures": [
+        [
+          2,
+          9
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          12,
+          13
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_04": 0.56,
+        "REP_01": 36.22,
+        "REP_03": 29.28,
+        "REP_05": 0.0,
+        "REP_08": 0.0,
+        "REP_02": 33.62,
+        "REP_06": 0.0,
+        "REP_07": 0.26
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 1.0,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_099",
+      "seed": 8298,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          14,
+          17
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "voi_selected": [
+        "REP_01",
+        "REP_02"
+      ],
+      "voi_scores": {
+        "REP_07": 0.0,
+        "REP_08": 0.0,
+        "REP_02": 34.03,
+        "REP_03": 28.31,
+        "REP_04": 0.0,
+        "REP_01": 36.43,
+        "REP_05": 0.0,
+        "REP_06": 0.0
+      },
+      "delivery_oracle": 0.2143,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 0.2143,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    },
+    {
+      "scenario_id": "V3_SCEN_100",
+      "seed": 8299,
+      "true_closures": [
+        [
+          5,
+          12
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          9
+        ]
+      ],
+      "voi_selected": [
+        "REP_02",
+        "REP_01"
+      ],
+      "voi_scores": {
+        "REP_03": 35.62,
+        "REP_02": 36.62,
+        "REP_04": 0.04,
+        "REP_08": 0.0,
+        "REP_06": 0.3,
+        "REP_05": 0.0,
+        "REP_07": 0.0,
+        "REP_01": 36.16
+      },
+      "delivery_oracle": 1.0,
+      "delivery_voi": 0.2143,
+      "delivery_sev": 0.2143,
+      "delivery_chrono": 1.0,
+      "delivery_rand": 0.2143,
+      "delivery_conservative": 0.2143
+    }
+  ]
+}

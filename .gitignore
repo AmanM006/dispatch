@@ -1,0 +1,19 @@
+# Environment variables and secrets
+.env
+*.env
+*.key
+credentials.yaml
+credentials.json
+secrets/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Evaluation outputs and scratch logs
+*.log
+.system_generated/
