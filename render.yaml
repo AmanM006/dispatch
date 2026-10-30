@@ -17,4 +17,4 @@ services:
         value: production
       - key: DISPATCH_HMAC_SECRET
         generateValue: true
-    healthCheckPath: /api/state
+    healthCheckPath: /health

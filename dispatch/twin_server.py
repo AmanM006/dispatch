@@ -268,6 +268,10 @@ class OperatorDecisionRequest(BaseModel):
     operator_display_name: str = Field("Watch Officer", max_length=64)
     override_reason: Optional[str] = Field(None, max_length=256)
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 @app.get("/api/state")
 def get_state(request: Request, response: Response):
     sim = get_or_create_session(request, response)
