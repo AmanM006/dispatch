@@ -20,17 +20,22 @@ Final Deployment Hardening Implementation:
    - In-memory session store documented with Redis enterprise integration pattern.
 """
 
+import asyncio
 import os
 import time
 import copy
 import random
 import uuid
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Any, List, Optional, Tuple
 from fastapi import FastAPI, HTTPException, Request, Response, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
+
+# Dedicated thread pool for blocking I/O (Nemotron inference calls)
+_INFERENCE_EXECUTOR = ThreadPoolExecutor(max_workers=4, thread_name_prefix="nemotron")
 
 from dispatch.controller import DispatchController
 from dispatch.models import IncidentReport, VerificationStatus, IncidentType, FleetVehicle, SectorNode
@@ -269,11 +274,11 @@ class OperatorDecisionRequest(BaseModel):
     override_reason: Optional[str] = Field(None, max_length=256)
 
 @app.get("/health")
-def health():
+async def health():
     return {"status": "ok"}
 
 @app.get("/api/state")
-def get_state(request: Request, response: Response):
+async def get_state(request: Request, response: Response):
     sim = get_or_create_session(request, response)
     sim.advance_authoritative_clock()
     ctrl = sim.controller
@@ -361,10 +366,11 @@ def switch_scenario(mode: str, request: Request, response: Response):
     return {"status": "success", "mode": sim.mode}
 
 @app.post("/api/ingest_next_incident")
-def ingest_next_incident(request: Request, response: Response):
+async def ingest_next_incident(request: Request, response: Response):
     global GLOBAL_NEMOTRON_CALLS_USED
     sim = get_or_create_session(request, response)
-    
+
+    # Pre-flight checks (fast path — no blocking I/O)
     with sim.lock:
         # Check incident feed availability BEFORE consuming any quota
         if not sim.incident_feed:
@@ -386,21 +392,29 @@ def ingest_next_incident(request: Request, response: Response):
         item = sim.incident_feed.pop(0)
         sim.session_nemotron_calls += 1
 
-        try:
-            dec = sim.controller.process_field_report(
+    # Run blocking Nemotron inference in a dedicated thread pool
+    # so the event loop (and /health) stays responsive during the ~15s LLM call
+    loop = asyncio.get_event_loop()
+    try:
+        dec = await loop.run_in_executor(
+            _INFERENCE_EXECUTOR,
+            lambda: sim.controller.process_field_report(
                 report_id=item["id"],
                 raw_text=item["text"],
                 source_channel=item["channel"],
                 auth_token=None
             )
+        )
+        with sim.lock:
             sim.current_version += 1
-        except Exception as e:
-            # Revert counters if inference attempt fails before completion
-            with GLOBAL_SPEND_LOCK:
-                GLOBAL_NEMOTRON_CALLS_USED = max(0, GLOBAL_NEMOTRON_CALLS_USED - 1)
+    except Exception as e:
+        # Revert counters if inference attempt fails before completion
+        with GLOBAL_SPEND_LOCK:
+            GLOBAL_NEMOTRON_CALLS_USED = max(0, GLOBAL_NEMOTRON_CALLS_USED - 1)
+        with sim.lock:
             sim.session_nemotron_calls = max(0, sim.session_nemotron_calls - 1)
             sim.incident_feed.insert(0, item)
-            raise HTTPException(status_code=502, detail=f"Inference failure contacting Nebius Token Factory: {str(e)}")
+        raise HTTPException(status_code=502, detail=f"Inference failure contacting Nebius Token Factory: {str(e)}")
 
     return {
         "status": "ingested",
@@ -705,7 +719,7 @@ def get_evsi_inspector(incident_id: str, request: Request, response: Response):
     return breakdown
 
 @app.get("/", response_class=HTMLResponse)
-def index():
+async def index():
     html_path = os.path.join(os.path.dirname(__file__), "twin_ui.html")
     if os.path.exists(html_path):
         with open(html_path, "r", encoding="utf-8") as f:
