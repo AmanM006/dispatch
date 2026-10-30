@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -600,7 +600,8 @@
             <div style="margin-top:12px; line-height:1.45; color:#cbd5e1;">
                 <div style="font-family:var(--font-mono); font-size:0.68rem; color:#94a3b8; background:var(--bg-input); padding:8px; border-radius:5px; border:1px solid var(--border-subtle);">
                     <strong>Governing Equation (Restricted-Policy EVSI):</strong><br>
-                    EVSI_R = \mathbb{E}_y [ U(\pi^*(y), x) ] - U(\pi_0, x_0) - C_{recon}
+                    EVSI_R = E_y[ E_{x|y}[ U(&pi;_R(y), x) ] ] &minus; E_x[ U(&pi;_0, x) ] &minus; C_recon
+                    <br><span style="font-size:0.62rem; color:#64748b; margin-top:4px; display:block;">&pi;_R = post-observation policy in implemented restricted class; inner E marginalises over physical state x|y; outer E marginalises over observations y; C_recon = drone verification cost.</span>
                 </div>
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;" id="evsiModalGrid">
